@@ -32,6 +32,7 @@ namespace Garage301
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.MapRazorPages(); // Ensure Razor Pages are mapped
 
             app.UseRouting();
 

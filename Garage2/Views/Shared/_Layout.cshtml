@@ -22,6 +22,7 @@
                 <a class="text-2xl font-bold tracking-wide hover:text-red-500" asp-controller="Home" asp-action="Index">
                     DAJS Garage
                 </a>
+                <partial name="_LoginPartial" />
                 <!-- Mobile Menu Button -->
                 <button class="text-white md:hidden" id="mobile-menu-btn" type="button" aria-label="Toggle navigation">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -47,7 +48,6 @@
                 <a class="nav-link text-dark hover:text-red-500" asp-controller="ParkedVehicles" asp-action="Index">Parked Vehicles</a>
                 <a class="nav-link text-dark hover:text-red-500" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>
-            <partial name="_LoginPartial" />
         </nav>
     </header>
 

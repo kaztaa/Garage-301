@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using Garage301.Data;
 using Garage301.Models;
 using Garage301.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace Garage301.Controllers
 {
     public class ParkedVehiclesController : Controller
     {
         private readonly Garage301Context _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ParkedVehiclesController(Garage301Context context)
+        public ParkedVehiclesController(Garage301Context context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: ParkedVehicles
