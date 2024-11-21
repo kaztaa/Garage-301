@@ -10,13 +10,13 @@ namespace Gym.Data
         private static RoleManager<IdentityRole> roleManager = default!;
         private static UserManager<ApplicationUser> userManager = default!;
 
-        public static async Task Init(Garage301Context _context, IServiceProvider servises)
+        public static async Task Init(Garage301Context _context, IServiceProvider services)
         {
             context = _context;
             if (context.Roles.Any()) return;
 
-            roleManager = servises.GetRequiredService<RoleManager<IdentityRole>>();
-            userManager = servises.GetRequiredService<UserManager<ApplicationUser>>();
+            roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
             var roleNames = new[] { "Member", "Admin" };
             var adminEmail = "admin@admin.com";
