@@ -18,14 +18,14 @@ namespace Gym.Data
             roleManager = servises.GetRequiredService<RoleManager<IdentityRole>>();
             userManager = servises.GetRequiredService<UserManager<ApplicationUser>>();
 
-            var roleNames = new[] { "User", "Admin" };
+            var roleNames = new[] { "Member", "Admin" };
             var adminEmail = "admin@admin.com";
             var adminFistname = "Admin";
-            var adminLastname = "Adminsson";
+            var adminLastname = "Adminson";
 
-            var userEmail = "user@user.com";
-            var userFirstname = "Namn";
-            var userLastname = "Namnsson";
+            var userEmail = "member@member.com";
+            var userFirstname = "Member";
+            var userLastname = "Memberson";
             var pwd = "12qw#¤ER";
 
 
@@ -35,7 +35,7 @@ namespace Gym.Data
             var user = await addAccountAsync(userEmail, userFirstname, userLastname, pwd);
 
             await addUserToRoleAsync(admin, "Admin");
-            await addUserToRoleAsync(user, "User");
+            await addUserToRoleAsync(user, "Member");
 
 
         }
