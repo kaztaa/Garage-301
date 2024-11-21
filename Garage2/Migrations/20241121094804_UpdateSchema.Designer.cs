@@ -4,6 +4,7 @@ using Garage301.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage301.Migrations
 {
     [DbContext(typeof(Garage301Context))]
-    partial class Garage301ContextModelSnapshot : ModelSnapshot
+    [Migration("20241121094804_UpdateSchema")]
+    partial class UpdateSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,38 +193,6 @@ namespace Garage301.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("VehicleTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Car"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Motorcycle"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Truck"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Bus"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Van"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Bicycle"
-                        });
                 });
 
             modelBuilder.Entity("Garage301.Models.ParkedVehicle", b =>
