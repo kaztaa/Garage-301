@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
-namespace Garage2.Models
+namespace Garage301.Models
 {
     public class VehicleTypes
     {

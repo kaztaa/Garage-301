@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
-namespace Garage2.Models.ViewModels
+namespace Garage301.Models.ViewModels
 {
     public class EditParkedVehicleViewModel
     {

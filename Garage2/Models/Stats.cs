@@ -1,4 +1,4 @@
-﻿namespace Garage2.Models
+﻿namespace Garage301.Models
 {
     public class Stats
     {

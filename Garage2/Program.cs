@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Garage2.Data;
-namespace Garage2
+using Garage301.Data;
+using Microsoft.AspNetCore.Identity;
+using Garage301.Models;
+namespace Garage301
 {
     public class Program
     {
@@ -10,6 +12,10 @@ namespace Garage2
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<Garage301Context>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Garage301Context") ?? throw new InvalidOperationException("Connection string 'Garage301Context' not found.")));
+
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<Garage301Context>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
