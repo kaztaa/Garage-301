@@ -151,7 +151,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 1,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2689),
+                            ArrivalTime = new DateTime(2024, 11, 21, 14, 42, 25, 40, DateTimeKind.Local).AddTicks(2527),
                             Color = "Blue",
                             Make = "Toyota",
                             Model = "Corolla",
@@ -162,7 +162,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 2,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2695),
+                            ArrivalTime = new DateTime(2024, 11, 21, 14, 42, 25, 40, DateTimeKind.Local).AddTicks(2533),
                             Color = "Green",
                             Make = "Hyundai",
                             Model = "i3",
@@ -173,7 +173,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 3,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2699),
+                            ArrivalTime = new DateTime(2024, 11, 21, 14, 42, 25, 40, DateTimeKind.Local).AddTicks(2537),
                             Color = "Black",
                             Make = "BMW",
                             Model = "M3",
@@ -184,7 +184,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 4,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2702),
+                            ArrivalTime = new DateTime(2024, 11, 21, 14, 42, 25, 40, DateTimeKind.Local).AddTicks(2540),
                             Color = "Red",
                             Make = "Honda",
                             Model = "Goldwing",
@@ -195,7 +195,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 5,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2706),
+                            ArrivalTime = new DateTime(2024, 11, 21, 14, 42, 25, 40, DateTimeKind.Local).AddTicks(2544),
                             Color = "Green",
                             Make = "Yamaha",
                             Model = "R1",
