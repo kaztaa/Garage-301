@@ -3,11 +3,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Garage301.Data;
 using Microsoft.AspNetCore.Identity;
 using Garage301.Models;
+using Garage301.Extentions;
 namespace Garage301
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<Garage301Context>(options =>
@@ -29,6 +30,10 @@ namespace Garage301
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+
+            await app.SeedDataAsync();
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
