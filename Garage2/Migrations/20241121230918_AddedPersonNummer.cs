@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Garage301.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class AddedPersonNummer : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,6 +34,7 @@ namespace Garage301.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Personnummer = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -264,11 +265,11 @@ namespace Garage301.Migrations
                 columns: new[] { "Id", "ApplicationUserId", "ArrivalTime", "CheckoutTime", "Color", "Make", "Model", "NumberOfWheels", "ParkingSpotId", "RegistrationNumber", "VehicleTypesId" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2689), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
-                    { 2, null, new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2695), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
-                    { 3, null, new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2699), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
-                    { 4, null, new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2702), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
-                    { 5, null, new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2706), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
+                    { 1, null, new DateTime(2024, 11, 21, 22, 9, 17, 836, DateTimeKind.Local).AddTicks(4140), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
+                    { 2, null, new DateTime(2024, 11, 21, 22, 9, 17, 836, DateTimeKind.Local).AddTicks(4148), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
+                    { 3, null, new DateTime(2024, 11, 21, 22, 9, 17, 836, DateTimeKind.Local).AddTicks(4153), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
+                    { 4, null, new DateTime(2024, 11, 21, 22, 9, 17, 836, DateTimeKind.Local).AddTicks(4157), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
+                    { 5, null, new DateTime(2024, 11, 21, 22, 9, 17, 836, DateTimeKind.Local).AddTicks(4161), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -302,6 +303,12 @@ namespace Garage301.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUser_Personnummer",
+                table: "AspNetUsers",
+                column: "Personnummer",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Garage301.Areas.Identity.Pages.Account
@@ -46,35 +47,20 @@ namespace Garage301.Areas.Identity.Pages.Account
             _emailSender = emailSender;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string ReturnUrl { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
+
+            [Required]
+            [Display(Name = "User Name")]
+            public string UserName { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -87,26 +73,23 @@ namespace Garage301.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Last name")]
             public string LastName { get; set; }
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
+
+            [Required]
+            [RegularExpression(@"^\d{6}-\d{4}$", ErrorMessage = "Personnummer must be in the format YYMMDD-XXXX.")]
+            [Display(Name = "Personnummer")]
+            public string Personnummer { get; set; }
+
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
         }
-
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -118,15 +101,51 @@ namespace Garage301.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
+                // Validate Personnummer format and age
+                if (!DateTime.TryParseExact(Input.Personnummer.Substring(0, 6), "yyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime birthDate))
+                {
+                    ModelState.AddModelError("Personnummer", "Invalid birthdate in personnummer.");
+                    return Page();
+                }
+
+                var age = DateTime.Today.Year - birthDate.Year;
+                if (birthDate.Date > DateTime.Today.AddYears(-age)) age--;
+
+                if (age < 18)
+                {
+                    ModelState.AddModelError("Personnummer", "You must be at least 18 years old to register.");
+                    return Page();
+                }
+
+                // Validate that the first name is not the same as the last name
+                if (Input.FirstName.Equals(Input.LastName, StringComparison.OrdinalIgnoreCase))
+                {
+                    ModelState.AddModelError("", "First name cannot be the same as last name.");
+                    return Page();
+                }
+
+                // Check if Personnummer is unique
+                var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Personnummer == Input.Personnummer);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("Personnummer", "This personnummer is already registered.");
+                    return Page();
+                }
+
+                // Create a new user and set the properties
                 var user = CreateUser();
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                //user.TimeOfRegistration = DateTime.Now;
+                user.Personnummer = Input.Personnummer;
+                user.UserName = Input.UserName;
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                // Create the user with the provided password
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -155,6 +174,8 @@ namespace Garage301.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
+
+                // Add any errors that occurred during user creation
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -164,6 +185,8 @@ namespace Garage301.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+
 
         private ApplicationUser CreateUser()
         {

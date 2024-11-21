@@ -20,37 +20,43 @@ namespace Gym.Data
 
             var roleNames = new[] { "Member", "Admin" };
             var adminEmail = "admin@admin.com";
-            var adminFistname = "Admin";
+            var adminFirstname = "Admin";
             var adminLastname = "Adminson";
+            var adminPersonnummer = "8701011234"; // Unique personnummer
 
             var userEmail = "member@member.com";
             var userFirstname = "Member";
             var userLastname = "Memberson";
-            var pwd = "12qw#¤ER";
+            var userPersonnummer = "9202025678"; // Unique personnummer
 
+            var pwd = "12qw#¤ER";
 
             await AddRolesAsync(roleNames);
 
-            var admin = await addAccountAsync(adminEmail,adminFistname, adminLastname, pwd);
-            var user = await addAccountAsync(userEmail, userFirstname, userLastname, pwd);
+            var admin = await AddAccountAsync(adminEmail, adminFirstname, adminLastname, adminPersonnummer, pwd);
+            var user = await AddAccountAsync(userEmail, userFirstname, userLastname, userPersonnummer, pwd);
 
-            await addUserToRoleAsync(admin, "Admin");
-            await addUserToRoleAsync(user, "Member");
+            if (admin != null)
+            {
+                await AddUserToRoleAsync(admin, "Admin");
+            }
 
-
+            if (user != null)
+            {
+                await AddUserToRoleAsync(user, "Member");
+            }
         }
 
-        private static async Task addUserToRoleAsync(ApplicationUser user, string roleName)
+        private static async Task AddUserToRoleAsync(ApplicationUser user, string roleName)
         {
             if (!await userManager.IsInRoleAsync(user, roleName))
             {
                 var result = await userManager.AddToRoleAsync(user, roleName);
                 if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
-
             }
         }
 
-        private static async Task<ApplicationUser> addAccountAsync(string accountEmail, string firstName, string lastName, string pwd ) 
+        private static async Task<ApplicationUser?> AddAccountAsync(string accountEmail, string firstName, string lastName, string personnummer, string pwd)
         {
             var found = await userManager.FindByNameAsync(accountEmail);
 
@@ -62,9 +68,8 @@ namespace Gym.Data
                 Email = accountEmail,
                 FirstName = firstName,
                 LastName = lastName,
+                Personnummer = personnummer,
                 EmailConfirmed = true
-
-            
             };
 
             var result = await userManager.CreateAsync(user, pwd);
