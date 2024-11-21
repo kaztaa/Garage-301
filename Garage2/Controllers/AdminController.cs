@@ -16,39 +16,49 @@ namespace Garage301.Controllers
         // Visa lista över parkeringsplatser
         public IActionResult ParkingSpots()
         {
-            var parkingSpots = _context.ParkingSpot.ToList();
-            return View(parkingSpots);
+            //var parkingSpots = _context.ParkingSpot; // Hämtar alla parkeringsplatser från databasen
+            var parkingSpots = _context.ParkingSpot.ToList(); // Hämtar alla parkeringsplatser från databasen
+            //return View(parkingSpots); // Skickar data till vyn
+            return View("Admin", parkingSpots);
         }
 
-        // Lägg till en parkeringsplats
         [HttpPost]
-        public async Task<IActionResult> AddParkingSpot()
+        public IActionResult IncreaseParkingSpots()
         {
-            if (_context.ParkingSpot.Count() < ParkingSpot.MaxParkingSpots)
+            int currentMax = _context.ParkingSpot.Any()
+                ? _context.ParkingSpot.Max(p => p.SpotNumber)
+                : 0;
+
+            if (currentMax < ParkingSpot.MaxParkingSpots)
             {
                 var newSpot = new ParkingSpot
                 {
-                    SpotNumber = _context.ParkingSpot.Count() + 1,
-                    IsOccupied = false
+                    SpotNumber = currentMax + 1,
+                    IsOccupied = false,
+                    Location = $"Section {currentMax + 1}"
                 };
 
                 _context.ParkingSpot.Add(newSpot);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
-            return RedirectToAction(nameof(ParkingSpots));
+
+            return RedirectToAction("ParkingSpots");
         }
 
-        // Ta bort en parkeringsplats
         [HttpPost]
-        public async Task<IActionResult> RemoveParkingSpot(int id)
+        public IActionResult DecreaseParkingSpots()
         {
-            var spot = await _context.ParkingSpot.FindAsync(id);
-            if (spot != null && !spot.IsOccupied)
+            var lastSpot = _context.ParkingSpot
+                .OrderByDescending(p => p.SpotNumber)
+                .FirstOrDefault();
+
+            if (lastSpot != null && !lastSpot.IsOccupied)
             {
-                _context.ParkingSpot.Remove(spot);
-                await _context.SaveChangesAsync();
+                _context.ParkingSpot.Remove(lastSpot);
+                _context.SaveChanges();
             }
-            return RedirectToAction(nameof(ParkingSpots));
+
+            return RedirectToAction("ParkingSpots");
         }
     }
 
