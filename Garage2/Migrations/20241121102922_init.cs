@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Garage301.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -111,11 +111,11 @@ namespace Garage301.Migrations
                 columns: new[] { "Id", "ArrivalTime", "CheckoutTime", "Color", "Make", "Model", "NumberOfWheels", "ParkingSpotId", "RegistrationNumber", "VehicleTypesId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1782), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
-                    { 2, new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1787), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
-                    { 3, new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1791), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
-                    { 4, new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1795), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
-                    { 5, new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1799), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
+                    { 1, new DateTime(2024, 11, 21, 9, 29, 22, 45, DateTimeKind.Local).AddTicks(3985), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
+                    { 2, new DateTime(2024, 11, 21, 9, 29, 22, 45, DateTimeKind.Local).AddTicks(3992), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
+                    { 3, new DateTime(2024, 11, 21, 9, 29, 22, 45, DateTimeKind.Local).AddTicks(3995), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
+                    { 4, new DateTime(2024, 11, 21, 9, 29, 22, 45, DateTimeKind.Local).AddTicks(3999), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
+                    { 5, new DateTime(2024, 11, 21, 9, 29, 22, 45, DateTimeKind.Local).AddTicks(4003), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
                 });
 
             migrationBuilder.CreateIndex(
