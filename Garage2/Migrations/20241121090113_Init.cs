@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace Garage2.Migrations
+namespace Garage301.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateVehicleTypeTable3 : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,7 @@ namespace Garage2.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,7 +50,7 @@ namespace Garage2.Migrations
                         column: x => x.VehicleTypesId,
                         principalTable: "VehicleTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,11 +111,11 @@ namespace Garage2.Migrations
                 columns: new[] { "Id", "ArrivalTime", "CheckoutTime", "Color", "Make", "Model", "NumberOfWheels", "ParkingSpotId", "RegistrationNumber", "VehicleTypesId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 11, 20, 21, 33, 25, 986, DateTimeKind.Local).AddTicks(1149), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
-                    { 2, new DateTime(2024, 11, 20, 21, 33, 25, 986, DateTimeKind.Local).AddTicks(1155), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
-                    { 3, new DateTime(2024, 11, 20, 21, 33, 25, 986, DateTimeKind.Local).AddTicks(1160), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
-                    { 4, new DateTime(2024, 11, 20, 21, 33, 25, 986, DateTimeKind.Local).AddTicks(1164), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
-                    { 5, new DateTime(2024, 11, 20, 21, 33, 25, 986, DateTimeKind.Local).AddTicks(1168), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
+                    { 1, new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1782), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
+                    { 2, new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1787), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
+                    { 3, new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1791), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
+                    { 4, new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1795), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
+                    { 5, new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1799), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
                 });
 
             migrationBuilder.CreateIndex(

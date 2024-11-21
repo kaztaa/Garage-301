@@ -13,9 +13,9 @@ namespace Garage2.Controllers
 {
     public class ParkedVehiclesController : Controller
     {
-        private readonly Garage2Context _context;
+        private readonly Garage301Context _context;
 
-        public ParkedVehiclesController(Garage2Context context)
+        public ParkedVehiclesController(Garage301Context context)
         {
             _context = context;
         }

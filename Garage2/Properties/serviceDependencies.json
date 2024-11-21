@@ -2,7 +2,8 @@
   "dependencies": {
     "mssql1": {
       "type": "mssql",
-      "connectionId": "ConnectionStrings:Garage2Context"
+      "connectionId": "ConnectionStrings:Garage301Context",
+      //"connectionId": "ConnectionStrings:Garage2Context"
     }
   }
 }

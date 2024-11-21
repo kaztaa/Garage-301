@@ -4,16 +4,19 @@ using Garage2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Garage2.Migrations
+namespace Garage301.Migrations
 {
-    [DbContext(typeof(Garage2Context))]
-    partial class Garage2ContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(Garage301Context))]
+    [Migration("20241121090113_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +76,7 @@ namespace Garage2.Migrations
                         new
                         {
                             Id = 1,
-                            ArrivalTime = new DateTime(2024, 11, 20, 21, 33, 25, 986, DateTimeKind.Local).AddTicks(1149),
+                            ArrivalTime = new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1782),
                             Color = "Blue",
                             Make = "Toyota",
                             Model = "Corolla",
@@ -84,7 +87,7 @@ namespace Garage2.Migrations
                         new
                         {
                             Id = 2,
-                            ArrivalTime = new DateTime(2024, 11, 20, 21, 33, 25, 986, DateTimeKind.Local).AddTicks(1155),
+                            ArrivalTime = new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1787),
                             Color = "Green",
                             Make = "Hyundai",
                             Model = "i3",
@@ -95,7 +98,7 @@ namespace Garage2.Migrations
                         new
                         {
                             Id = 3,
-                            ArrivalTime = new DateTime(2024, 11, 20, 21, 33, 25, 986, DateTimeKind.Local).AddTicks(1160),
+                            ArrivalTime = new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1791),
                             Color = "Black",
                             Make = "BMW",
                             Model = "M3",
@@ -106,7 +109,7 @@ namespace Garage2.Migrations
                         new
                         {
                             Id = 4,
-                            ArrivalTime = new DateTime(2024, 11, 20, 21, 33, 25, 986, DateTimeKind.Local).AddTicks(1164),
+                            ArrivalTime = new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1795),
                             Color = "Red",
                             Make = "Honda",
                             Model = "Goldwing",
@@ -117,7 +120,7 @@ namespace Garage2.Migrations
                         new
                         {
                             Id = 5,
-                            ArrivalTime = new DateTime(2024, 11, 20, 21, 33, 25, 986, DateTimeKind.Local).AddTicks(1168),
+                            ArrivalTime = new DateTime(2024, 11, 21, 8, 1, 13, 46, DateTimeKind.Local).AddTicks(1799),
                             Color = "Green",
                             Make = "Yamaha",
                             Model = "R1",
@@ -241,7 +244,8 @@ namespace Garage2.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -283,9 +287,9 @@ namespace Garage2.Migrations
             modelBuilder.Entity("Garage2.Models.ParkedVehicle", b =>
                 {
                     b.HasOne("Garage2.Models.VehicleTypes", "VehicleType")
-                        .WithMany()
+                        .WithMany("ParkedVehicles")
                         .HasForeignKey("VehicleTypesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("VehicleType");
@@ -303,6 +307,11 @@ namespace Garage2.Migrations
             modelBuilder.Entity("Garage2.Models.ParkedVehicle", b =>
                 {
                     b.Navigation("ParkingSpot");
+                });
+
+            modelBuilder.Entity("Garage2.Models.VehicleTypes", b =>
+                {
+                    b.Navigation("ParkedVehicles");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,9 +8,9 @@ using Humanizer.Localisation;
 
 namespace Garage2.Data
 {
-    public class Garage2Context : DbContext
+    public class Garage301Context : DbContext
     {
-        public Garage2Context(DbContextOptions<Garage2Context> options)
+        public Garage301Context(DbContextOptions<Garage301Context> options)
             : base(options)
         {
         }

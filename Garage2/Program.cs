@@ -8,8 +8,8 @@ namespace Garage2
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDbContext<Garage2Context>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("Garage2Context") ?? throw new InvalidOperationException("Connection string 'Garage2Context' not found.")));
+            builder.Services.AddDbContext<Garage301Context>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Garage301Context") ?? throw new InvalidOperationException("Connection string 'Garage301Context' not found.")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
