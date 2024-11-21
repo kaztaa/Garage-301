@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Garage2.Data;
-using Garage2.Models;
-using Garage2.Models.ViewModels;
+using Garage301.Data;
+using Garage301.Models;
+using Garage301.Models.ViewModels;
 
-namespace Garage2.Controllers
+namespace Garage301.Controllers
 {
     public class ParkedVehiclesController : Controller
     {

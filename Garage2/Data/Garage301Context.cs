@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Garage2.Models;
+using Garage301.Models;
 using Humanizer.Localisation;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
-namespace Garage2.Data
+namespace Garage301.Data
 {
-    public class Garage301Context : DbContext
+    public class Garage301Context : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public Garage301Context(DbContextOptions<Garage301Context> options)
             : base(options)
         {
         }
 
-        public DbSet<Garage2.Models.ParkedVehicle> ParkedVehicle { get; set; } = default!;
-        public DbSet<Garage2.Models.ParkingSpot> ParkingSpot { get; set; } = default!;
-        public DbSet<Garage2.Models.VehicleTypes> VehicleTypes { get; set; } = default!;
+        public DbSet<Garage301.Models.ParkedVehicle> ParkedVehicle { get; set; } = default!;
+        public DbSet<Garage301.Models.ParkingSpot> ParkingSpot { get; set; } = default!;
+        public DbSet<Garage301.Models.VehicleTypes> VehicleTypes { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

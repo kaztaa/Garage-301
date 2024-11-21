@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Garage2.Models
+namespace Garage301.Models
 {
     public class ParkedVehicle
     {
