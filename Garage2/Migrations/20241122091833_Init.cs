@@ -234,8 +234,8 @@ namespace Garage301.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Personnummer", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "user1", 0, "604eb3a5-3f4b-4329-aaf4-9135da3b21b2", "user1@example.com", false, "user1", "Ehds", false, null, null, null, null, "", null, false, "c33f0c02-1a2e-44d2-83b5-42fa7af45f8e", false, null },
-                    { "user2", 0, "cd98163e-00fa-4345-9932-537dc0a4e6fa", "user2@example.com", false, "user2", "Ehdsafd", false, null, null, null, null, "", null, false, "19ed55a7-1ea3-4f89-a441-bb27d923bc0a", false, null }
+                    { "user1", 0, "e18f7eca-de73-4d67-98e8-1550c2ebeceb", "user1@example.com", false, "user1", "Ehds", false, null, null, null, null, "", null, false, "a8133f11-f9f3-4708-a7c3-d4247a0e9ca6", false, null },
+                    { "user2", 0, "bed861be-480c-45dc-b9a0-b3241c866a23", "user2@example.com", false, "user2", "Ehdsafd", false, null, null, null, null, "", null, false, "d36a5a3f-81bd-427e-af1d-ed55c1588a1a", false, null }
                 });
 
             migrationBuilder.InsertData(
@@ -275,11 +275,11 @@ namespace Garage301.Migrations
                 columns: new[] { "Id", "ApplicationUserId", "ArrivalTime", "CheckoutTime", "Color", "Make", "Model", "NumberOfWheels", "ParkingSpotId", "RegistrationNumber", "VehicleTypesId" },
                 values: new object[,]
                 {
-                    { 1, "user1", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5632), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
-                    { 2, "user2", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5639), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
-                    { 3, "user2", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5643), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
-                    { 4, "user1", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5647), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
-                    { 5, "user2", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5651), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
+                    { 1, "user1", new DateTime(2024, 11, 22, 8, 18, 32, 498, DateTimeKind.Local).AddTicks(8699), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
+                    { 2, "user2", new DateTime(2024, 11, 22, 8, 18, 32, 498, DateTimeKind.Local).AddTicks(8705), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
+                    { 3, "user2", new DateTime(2024, 11, 22, 8, 18, 32, 498, DateTimeKind.Local).AddTicks(8709), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
+                    { 4, "user1", new DateTime(2024, 11, 22, 8, 18, 32, 498, DateTimeKind.Local).AddTicks(8713), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
+                    { 5, "user2", new DateTime(2024, 11, 22, 8, 18, 32, 498, DateTimeKind.Local).AddTicks(8717), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
                 });
 
             migrationBuilder.CreateIndex(
