@@ -34,6 +34,7 @@ namespace Garage301.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Personnummer = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -274,11 +275,19 @@ namespace Garage301.Migrations
                 columns: new[] { "Id", "ApplicationUserId", "ArrivalTime", "CheckoutTime", "Color", "Make", "Model", "NumberOfWheels", "ParkingSpotId", "RegistrationNumber", "VehicleTypesId" },
                 values: new object[,]
                 {
+<<<<<<<< HEAD:Garage2/Migrations/20241121203908_Init.cs
                     { 1, "user1", new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3940), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
                     { 2, "user2", new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3947), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
                     { 3, "user2", new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3951), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
                     { 4, "user1", new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3955), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
                     { 5, "user2", new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3958), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
+========
+                    { 1, null, new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(127), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
+                    { 2, null, new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(136), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
+                    { 3, null, new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(143), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
+                    { 4, null, new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(149), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
+                    { 5, null, new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(156), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
+>>>>>>>> e25aeba7509576dd545ba9f66d37262ec5346052:Garage2/Migrations/20241122081454_Init.cs
                 });
 
             migrationBuilder.CreateIndex(
@@ -312,6 +321,12 @@ namespace Garage301.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUser_Personnummer",
+                table: "AspNetUsers",
+                column: "Personnummer",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

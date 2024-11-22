@@ -66,6 +66,10 @@ namespace Garage301.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Personnummer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -91,6 +95,10 @@ namespace Garage301.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("Personnummer")
+                        .IsUnique()
+                        .HasDatabaseName("IX_ApplicationUser_Personnummer");
 
                     b.ToTable("AspNetUsers", (string)null);
 
@@ -182,8 +190,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 1,
-                            ApplicationUserId = "user1",
-                            ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3940),
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(127),
                             Color = "Blue",
                             Make = "Toyota",
                             Model = "Corolla",
@@ -194,8 +201,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 2,
-                            ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3947),
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(136),
                             Color = "Green",
                             Make = "Hyundai",
                             Model = "i3",
@@ -206,8 +212,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 3,
-                            ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3951),
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(143),
                             Color = "Black",
                             Make = "BMW",
                             Model = "M3",
@@ -218,8 +223,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 4,
-                            ApplicationUserId = "user1",
-                            ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3955),
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(149),
                             Color = "Red",
                             Make = "Honda",
                             Model = "Goldwing",
@@ -230,8 +234,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 5,
-                            ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3958),
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(156),
                             Color = "Green",
                             Make = "Yamaha",
                             Model = "R1",

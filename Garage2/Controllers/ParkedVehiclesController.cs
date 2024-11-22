@@ -225,11 +225,43 @@ namespace Garage301.Controllers
         // POST: ParkedVehicles/CheckIn
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public async Task<IActionResult> CheckIn(ParkedVehicleCheckInViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
+                // Fetch the user based on the logged-in user's ID
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "User not found.");
+                }
+                else
+                {
+                    // Validate age based on Personnummer (format: YYMMDD-XXXX)
+                    if (user.Personnummer.Length >= 6)
+                    {
+                        string datePart = user.Personnummer.Substring(0, 6);
+                        if (DateTime.TryParseExact(datePart, "yyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime birthDate))
+                        {
+                            int age = DateTime.Now.Year - birthDate.Year;
+                            if (birthDate > DateTime.Now.AddYears(-age)) age--; // Adjust if birthday hasn't occurred this year
+
+                            if (age < 18)
+                            {
+                                ModelState.AddModelError("Personnummer", "You must be at least 18 years old to park a vehicle.");
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Personnummer", "Invalid Personnummer format.");
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Personnummer", "Invalid Personnummer format.");
+                    }
+                }
+
                 // Check if a vehicle with the same RegistrationNumber already exists
                 var existingVehicle = await _context.ParkedVehicle
                     .FirstOrDefaultAsync(v => v.RegistrationNumber == viewModel.RegistrationNumber);
@@ -281,6 +313,7 @@ namespace Garage301.Controllers
 
             return View(viewModel);
         }
+
 
 
 

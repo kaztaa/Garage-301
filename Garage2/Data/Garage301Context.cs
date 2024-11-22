@@ -58,6 +58,12 @@ namespace Garage301.Data
                 .HasForeignKey<ParkingSpot>(ps => ps.ParkedVehicleId) // Foreign key
                 .IsRequired(false); // It's optional for a ParkingSpot to be occupied
 
+            // Configure uniqueness for Personnummer
+            modelBuilder.Entity<ApplicationUser>()
+                .HasIndex(u => u.Personnummer)
+                .IsUnique()
+                .HasDatabaseName("IX_ApplicationUser_Personnummer");
+
             // Seed data for VehicleTypes
             modelBuilder.Entity<VehicleTypes>().HasData(
                 new VehicleTypes { Id = 1, Name = "Car" },

@@ -12,7 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage301.Migrations
 {
     [DbContext(typeof(Garage301Context))]
+<<<<<<<< HEAD:Garage2/Migrations/20241121203908_Init.Designer.cs
     [Migration("20241121203908_Init")]
+========
+    [Migration("20241122081454_Init")]
+>>>>>>>> e25aeba7509576dd545ba9f66d37262ec5346052:Garage2/Migrations/20241122081454_Init.Designer.cs
     partial class Init
     {
         /// <inheritdoc />
@@ -69,6 +73,10 @@ namespace Garage301.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Personnummer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -94,6 +102,10 @@ namespace Garage301.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("Personnummer")
+                        .IsUnique()
+                        .HasDatabaseName("IX_ApplicationUser_Personnummer");
 
                     b.ToTable("AspNetUsers", (string)null);
 
@@ -185,8 +197,12 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 1,
+<<<<<<<< HEAD:Garage2/Migrations/20241121203908_Init.Designer.cs
                             ApplicationUserId = "user1",
                             ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3940),
+========
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(127),
+>>>>>>>> e25aeba7509576dd545ba9f66d37262ec5346052:Garage2/Migrations/20241122081454_Init.Designer.cs
                             Color = "Blue",
                             Make = "Toyota",
                             Model = "Corolla",
@@ -197,8 +213,12 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 2,
+<<<<<<<< HEAD:Garage2/Migrations/20241121203908_Init.Designer.cs
                             ApplicationUserId = "user2",
                             ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3947),
+========
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(136),
+>>>>>>>> e25aeba7509576dd545ba9f66d37262ec5346052:Garage2/Migrations/20241122081454_Init.Designer.cs
                             Color = "Green",
                             Make = "Hyundai",
                             Model = "i3",
@@ -209,8 +229,12 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 3,
+<<<<<<<< HEAD:Garage2/Migrations/20241121203908_Init.Designer.cs
                             ApplicationUserId = "user2",
                             ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3951),
+========
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(143),
+>>>>>>>> e25aeba7509576dd545ba9f66d37262ec5346052:Garage2/Migrations/20241122081454_Init.Designer.cs
                             Color = "Black",
                             Make = "BMW",
                             Model = "M3",
@@ -221,8 +245,12 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 4,
+<<<<<<<< HEAD:Garage2/Migrations/20241121203908_Init.Designer.cs
                             ApplicationUserId = "user1",
                             ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3955),
+========
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(149),
+>>>>>>>> e25aeba7509576dd545ba9f66d37262ec5346052:Garage2/Migrations/20241122081454_Init.Designer.cs
                             Color = "Red",
                             Make = "Honda",
                             Model = "Goldwing",
@@ -233,8 +261,12 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 5,
+<<<<<<<< HEAD:Garage2/Migrations/20241121203908_Init.Designer.cs
                             ApplicationUserId = "user2",
                             ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3958),
+========
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(156),
+>>>>>>>> e25aeba7509576dd545ba9f66d37262ec5346052:Garage2/Migrations/20241122081454_Init.Designer.cs
                             Color = "Green",
                             Make = "Yamaha",
                             Model = "R1",
