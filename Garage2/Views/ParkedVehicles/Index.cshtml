@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Garage301.Models.ParkedVehicle>
+﻿@using System.Security.Claims
+@model Garage301.Models.ViewModels.RoleIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -28,7 +29,6 @@
     </form>
     <div class="mt-12">
         <a asp-action="Index" class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Back to Full List</a>
-
     </div>
 
     <table class="mt-6 w-full max-w-4xl rounded-lg border border-gray-200 bg-white shadow-md">
@@ -36,29 +36,29 @@
             <tr class="bg-gray-100">
                 <th class="border-b p-3 text-left">
                     <a class="text-gray-700 hover:text-gray-900" asp-action="Index" asp-route-sortBy="@ViewData["TypeSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-currentType="@ViewData["CurrentType"]">
-                        @Html.DisplayNameFor(model => model.VehicleType.Name)
+                        Vehicle Type
                     </a>
                 </th>
                 <th class="border-b p-3 text-left">
                     <a class="text-gray-700 hover:text-gray-900" asp-action="Index" asp-route-sortBy="@ViewData["RegNrSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-currentType="@ViewData["CurrentType"]">
-                        @Html.DisplayNameFor(model => model.RegistrationNumber)
+                        Registration Number
                     </a>
                 </th>
                 <th class="border-b p-3 text-left">
                     <a class="text-gray-700 hover:text-gray-900" asp-action="Index" asp-route-sortBy="@ViewData["ArrivalTimeSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-currentType="@ViewData["CurrentType"]">
-                        @Html.DisplayNameFor(model => model.ArrivalTime)
+                        Arrival Time
                     </a>
                 </th>
                 <th class="border-b p-3 text-left">
                     <a class="text-gray-700 hover:text-gray-900" asp-action="Index" asp-route-sortBy="@ViewData["ParkedDurationSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-currentType="@ViewData["CurrentType"]">
-                        @Html.DisplayNameFor(model => model.ParkedDuration)
+                        Parked Duration
                     </a>
                 </th>
                 <th class="border-b p-3"></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.Vehicles) // Use ViewModel's property (list of vehicles)
             {
                 <tr class="hover:bg-gray-100">
                     <td class="border-b p-3">@Html.DisplayFor(modelItem => item.VehicleType.Name)</td>
@@ -66,19 +66,25 @@
                     <td class="border-b p-3">@Html.DisplayFor(modelItem => item.ArrivalTime)</td>
                     <td class="border-b p-3">@Html.DisplayFor(modelItem => item.ParkedDuration)</td>
                     <td class="border-b p-3">
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="text-blue-500 hover:underline">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id" class="text-blue-500 hover:underline">Details</a> |
-                        <a asp-action="CheckOut" asp-route-id="@item.Id" class="text-blue-500 hover:underline">Checkout</a>
+                        <div class="flex space-x-2 w-full">
+                            <!-- Edit and Checkout buttons for all vehicles, enabled/disabled as needed -->
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-indigo-600" aria-disabled="false">Edit</a>
+                            <a asp-action="CheckOut" asp-route-id="@item.Id" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-600" aria-disabled="false">Checkout</a>
+
+                            <!-- Always Visible Details Button -->
+                            <a asp-action="Details" asp-route-id="@item.Id" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600" aria-disabled="false">Details</a>
+                        </div>
                     </td>
                 </tr>
             }
         </tbody>
+
     </table>
 
     <div class="my-20">
         <h2 class="mb-4 text-center text-2xl font-bold">Available Parking Spots</h2>
         <div class="grid-cols-4 grid gap-4">
-            @foreach (var spot in (List<Garage301.Models.ParkingSpot>)ViewData["ParkingSpots"])
+            @foreach (var spot in Model.ParkingSpots) // Use ViewModel's property
             {
                 <div class="rounded px-5 py-4 text-center text-white @(spot.IsOccupied ? "bg-red-500" : "bg-green-500")">
                     <p>Spot: @spot.SpotNumber</p>

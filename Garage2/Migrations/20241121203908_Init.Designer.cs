@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage301.Migrations
 {
     [DbContext(typeof(Garage301Context))]
-    [Migration("20241121134739_Init")]
+    [Migration("20241121203908_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -96,6 +96,36 @@ namespace Garage301.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "user1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "97dfbe7d-13d4-4c88-b253-a4d08deb6f75",
+                            Email = "user1@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "user1",
+                            LastName = "Ehds",
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "bf068dcf-f15e-4d34-8d27-96535bcd2b0c",
+                            TwoFactorEnabled = false
+                        },
+                        new
+                        {
+                            Id = "user2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "8bde5c94-e600-4c10-89ec-803f246e18ca",
+                            Email = "user2@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "user2",
+                            LastName = "Ehdsafd",
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "f360becc-c528-43f2-8f1f-cc72eb4acf75",
+                            TwoFactorEnabled = false
+                        });
                 });
 
             modelBuilder.Entity("Garage301.Models.ParkedVehicle", b =>
@@ -107,6 +137,7 @@ namespace Garage301.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ArrivalTime")
@@ -154,7 +185,8 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 1,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2689),
+                            ApplicationUserId = "user1",
+                            ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3940),
                             Color = "Blue",
                             Make = "Toyota",
                             Model = "Corolla",
@@ -165,7 +197,8 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 2,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2695),
+                            ApplicationUserId = "user2",
+                            ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3947),
                             Color = "Green",
                             Make = "Hyundai",
                             Model = "i3",
@@ -176,7 +209,8 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 3,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2699),
+                            ApplicationUserId = "user2",
+                            ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3951),
                             Color = "Black",
                             Make = "BMW",
                             Model = "M3",
@@ -187,7 +221,8 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 4,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2702),
+                            ApplicationUserId = "user1",
+                            ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3955),
                             Color = "Red",
                             Make = "Honda",
                             Model = "Goldwing",
@@ -198,7 +233,8 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 5,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2706),
+                            ApplicationUserId = "user2",
+                            ArrivalTime = new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3958),
                             Color = "Green",
                             Make = "Yamaha",
                             Model = "R1",
@@ -501,15 +537,19 @@ namespace Garage301.Migrations
 
             modelBuilder.Entity("Garage301.Models.ParkedVehicle", b =>
                 {
-                    b.HasOne("Garage301.Models.ApplicationUser", null)
+                    b.HasOne("Garage301.Models.ApplicationUser", "User")
                         .WithMany("Vehicles")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Garage301.Models.VehicleTypes", "VehicleType")
                         .WithMany("ParkedVehicles")
                         .HasForeignKey("VehicleTypesId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
 
                     b.Navigation("VehicleType");
                 });

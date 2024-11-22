@@ -72,5 +72,9 @@ namespace Garage301.Models
                 }
             }
         }
+
+        // Foreign Key to ApplicationUser
+        public string ApplicationUserId { get; set; }
+        public ApplicationUser User { get; set; } // Navigation property back to user
     }
 }
