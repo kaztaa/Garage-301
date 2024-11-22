@@ -34,7 +34,10 @@
                 <!-- Navbar Links (Hidden on mobile, shown on md and larger) -->
                 <div id="navbar-links" class="hidden space-x-6 md:flex">
                     <a class="nav-link text-dark hover:text-red-500" asp-controller="Home" asp-action="Index">Home</a>
-                    <a class="nav-link text-dark hover:text-red-500" asp-controller="ParkedVehicles" asp-action="Index">Parked Vehicles</a>
+                    @if (!User.IsInRole("Admin"))
+                    {
+                        <a class="nav-link text-dark hover:text-red-500" asp-controller="ParkedVehicles" asp-action="Index">Parked Vehicles</a>
+                    }
                     <a class="nav-link text-dark hover:text-red-500" asp-controller="ParkedVehicles" asp-action="Stats">Stats</a>
 
                     @if (User.IsInRole("Admin"))
