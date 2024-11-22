@@ -3,6 +3,8 @@
     public class Stats
     {
         public int TotalVehicles { get; set; }
+        public int AvailableSpots { get; set; }
+        public int OccupiedSpots { get; set; }
         public int Cars {  get; set; }
         public int Motorcycles { get; set; }
         public int Trucks { get; set; }
