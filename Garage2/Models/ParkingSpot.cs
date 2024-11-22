@@ -23,6 +23,6 @@ namespace Garage301.Models
         public string? Location { get; set; }
 
         // Enforce a maximum of 12 spots
-        public const int MaxParkingSpots = 12;
+        public const int MaxParkingSpots = 100;
     }
 }
