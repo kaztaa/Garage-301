@@ -28,6 +28,10 @@ namespace Garage301.Controllers
         // GET: ParkedVehicles
         public async Task<IActionResult> Index(string searchField, int type, string sortBy, string currentFilter, int currentType)
         {
+            if(User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
             //var vehicles = await _context.ParkedVehicle.Include(v => v.ParkingSpot).Include(v => v.VehicleType).ToListAsync();
             //ViewData["TypeSortParam"] = sortBy == "type_desc" ? "type_asc" : "type_desc";
             //ViewData["RegNrSortParam"] = sortBy == "regNr_desc" ? "regNr_asc" : "regNr_desc";
@@ -295,6 +299,8 @@ namespace Garage301.Controllers
                             ParkingSpotId = viewModel.ParkingSpotId,
                             ApplicationUserId = userId!
                         };
+
+                        parkingSpot.ParkedVehicle = parkedVehicle;
 
                         await _context.AddAsync(parkedVehicle);
                         await _context.SaveChangesAsync();

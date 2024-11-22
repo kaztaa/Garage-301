@@ -234,8 +234,8 @@ namespace Garage301.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Personnummer", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "user1", 0, "604eb3a5-3f4b-4329-aaf4-9135da3b21b2", "user1@example.com", false, "user1", "Ehds", false, null, null, null, null, "", null, false, "c33f0c02-1a2e-44d2-83b5-42fa7af45f8e", false, null },
-                    { "user2", 0, "cd98163e-00fa-4345-9932-537dc0a4e6fa", "user2@example.com", false, "user2", "Ehdsafd", false, null, null, null, null, "", null, false, "19ed55a7-1ea3-4f89-a441-bb27d923bc0a", false, null }
+                    { "user1", 0, "ee0dfa32-36c6-4cb6-9697-6dadb4571646", "user1@example.com", false, "user1", "Ehds", false, null, null, null, null, "", null, false, "eed1cfd9-e6bb-4746-8e4f-3ada13a1c0d0", false, null },
+                    { "user2", 0, "cae0ee41-7828-42df-b5f5-94f1b314f29f", "user2@example.com", false, "user2", "Ehdsafd", false, null, null, null, null, "", null, false, "53e5ce0a-97be-4104-b448-74956613841f", false, null }
                 });
 
             migrationBuilder.InsertData(
@@ -243,18 +243,13 @@ namespace Garage301.Migrations
                 columns: new[] { "Id", "IsOccupied", "Location", "ParkedVehicleId", "SpotNumber" },
                 values: new object[,]
                 {
-                    { 1, false, null, null, 1 },
-                    { 2, false, null, null, 2 },
-                    { 3, false, null, null, 3 },
-                    { 4, false, null, null, 4 },
-                    { 5, false, null, null, 5 },
-                    { 6, false, null, null, 6 },
-                    { 7, false, null, null, 7 },
-                    { 8, false, null, null, 8 },
-                    { 9, false, null, null, 9 },
-                    { 10, false, null, null, 10 },
-                    { 11, false, null, null, 11 },
-                    { 12, false, null, null, 12 }
+                    { 6, false, "Location 6", null, 6 },
+                    { 7, false, "Location 7", null, 7 },
+                    { 8, false, "Location 8", null, 8 },
+                    { 9, false, "Location 9", null, 9 },
+                    { 10, false, "Location 10", null, 10 },
+                    { 11, false, "Location 11", null, 11 },
+                    { 12, false, "Location 12", null, 12 }
                 });
 
             migrationBuilder.InsertData(
@@ -275,11 +270,23 @@ namespace Garage301.Migrations
                 columns: new[] { "Id", "ApplicationUserId", "ArrivalTime", "CheckoutTime", "Color", "Make", "Model", "NumberOfWheels", "ParkingSpotId", "RegistrationNumber", "VehicleTypesId" },
                 values: new object[,]
                 {
-                    { 1, "user1", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5632), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
-                    { 2, "user2", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5639), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
-                    { 3, "user2", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5643), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
-                    { 4, "user1", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5647), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
-                    { 5, "user2", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5651), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
+                    { 1, "user1", new DateTime(2024, 11, 22, 10, 38, 15, 871, DateTimeKind.Local).AddTicks(5074), null, "Blue", "Toyota", "Corolla", 4, 1, "ABC123", 1 },
+                    { 2, "user2", new DateTime(2024, 11, 22, 10, 38, 15, 871, DateTimeKind.Local).AddTicks(5081), null, "Green", "Hyundai", "i3", 4, 2, "ERT234", 1 },
+                    { 3, "user2", new DateTime(2024, 11, 22, 10, 38, 15, 871, DateTimeKind.Local).AddTicks(5086), null, "Black", "BMW", "M3", 4, 3, "ERR134", 1 },
+                    { 4, "user1", new DateTime(2024, 11, 22, 10, 38, 15, 871, DateTimeKind.Local).AddTicks(5090), null, "Red", "Honda", "Goldwing", 2, 4, "HFF577", 2 },
+                    { 5, "user2", new DateTime(2024, 11, 22, 10, 38, 15, 871, DateTimeKind.Local).AddTicks(5094), null, "Green", "Yamaha", "R1", 2, 5, "OOP123", 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ParkingSpot",
+                columns: new[] { "Id", "IsOccupied", "Location", "ParkedVehicleId", "SpotNumber" },
+                values: new object[,]
+                {
+                    { 1, true, "Location 1", 1, 1 },
+                    { 2, true, "Location 2", 2, 2 },
+                    { 3, true, "Location 3", 3, 3 },
+                    { 4, true, "Location 4", 4, 4 },
+                    { 5, true, "Location 5", 5, 5 }
                 });
 
             migrationBuilder.CreateIndex(
