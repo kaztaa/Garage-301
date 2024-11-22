@@ -68,7 +68,7 @@ namespace Garage301.Migrations
 
                     b.Property<string>("Personnummer")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -96,10 +96,6 @@ namespace Garage301.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("Personnummer")
-                        .IsUnique()
-                        .HasDatabaseName("IX_ApplicationUser_Personnummer");
-
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.HasData(
@@ -107,28 +103,30 @@ namespace Garage301.Migrations
                         {
                             Id = "user1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "97dfbe7d-13d4-4c88-b253-a4d08deb6f75",
+                            ConcurrencyStamp = "604eb3a5-3f4b-4329-aaf4-9135da3b21b2",
                             Email = "user1@example.com",
                             EmailConfirmed = false,
                             FirstName = "user1",
                             LastName = "Ehds",
                             LockoutEnabled = false,
+                            Personnummer = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bf068dcf-f15e-4d34-8d27-96535bcd2b0c",
+                            SecurityStamp = "c33f0c02-1a2e-44d2-83b5-42fa7af45f8e",
                             TwoFactorEnabled = false
                         },
                         new
                         {
                             Id = "user2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8bde5c94-e600-4c10-89ec-803f246e18ca",
+                            ConcurrencyStamp = "cd98163e-00fa-4345-9932-537dc0a4e6fa",
                             Email = "user2@example.com",
                             EmailConfirmed = false,
                             FirstName = "user2",
                             LastName = "Ehdsafd",
                             LockoutEnabled = false,
+                            Personnummer = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f360becc-c528-43f2-8f1f-cc72eb4acf75",
+                            SecurityStamp = "19ed55a7-1ea3-4f89-a441-bb27d923bc0a",
                             TwoFactorEnabled = false
                         });
                 });
@@ -190,7 +188,8 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 1,
-                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(127),
+                            ApplicationUserId = "user1",
+                            ArrivalTime = new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5632),
                             Color = "Blue",
                             Make = "Toyota",
                             Model = "Corolla",
@@ -201,7 +200,8 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 2,
-                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(136),
+                            ApplicationUserId = "user2",
+                            ArrivalTime = new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5639),
                             Color = "Green",
                             Make = "Hyundai",
                             Model = "i3",
@@ -212,7 +212,8 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 3,
-                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(143),
+                            ApplicationUserId = "user2",
+                            ArrivalTime = new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5643),
                             Color = "Black",
                             Make = "BMW",
                             Model = "M3",
@@ -223,7 +224,8 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 4,
-                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(149),
+                            ApplicationUserId = "user1",
+                            ArrivalTime = new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5647),
                             Color = "Red",
                             Make = "Honda",
                             Model = "Goldwing",
@@ -234,7 +236,8 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 5,
-                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(156),
+                            ApplicationUserId = "user2",
+                            ArrivalTime = new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5651),
                             Color = "Green",
                             Make = "Yamaha",
                             Model = "R1",
@@ -546,7 +549,7 @@ namespace Garage301.Migrations
                     b.HasOne("Garage301.Models.VehicleTypes", "VehicleType")
                         .WithMany("ParkedVehicles")
                         .HasForeignKey("VehicleTypesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");

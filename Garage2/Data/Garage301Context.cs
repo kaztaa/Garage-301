@@ -25,20 +25,20 @@ namespace Garage301.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            //// Configure the relationship between ParkedVehicle and VehicleTypes
-            //modelBuilder.Entity<ParkedVehicle>()
-            //    .HasOne(pv => pv.VehicleType)
-            //    .WithMany(vt => vt.ParkedVehicles)
-            //    .HasForeignKey(pv => pv.VehicleTypesId)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            // Configure the relationship between ParkedVehicle and VehicleTypes
+            modelBuilder.Entity<ParkedVehicle>()
+                .HasOne(pv => pv.VehicleType)
+                .WithMany(vt => vt.ParkedVehicles)
+                .HasForeignKey(pv => pv.VehicleTypesId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //// Configure one-to-one relationship between ParkedVehicle and ParkingSpot
-            //modelBuilder.Entity<ParkedVehicle>()
-            //    .HasOne(pv => pv.ParkingSpot)
-            //    .WithOne(ps => ps.ParkedVehicle)
-            //    .HasForeignKey<ParkingSpot>(ps => ps.ParkedVehicleId);
-            // Configure the one-to-many relationship between ApplicationUser and ParkedVehicle
+            // Configure one-to-one relationship between ParkedVehicle and ParkingSpot
+            modelBuilder.Entity<ParkedVehicle>()
+                .HasOne(pv => pv.ParkingSpot)
+                .WithOne(ps => ps.ParkedVehicle)
+                .HasForeignKey<ParkingSpot>(ps => ps.ParkedVehicleId);
 
+            //Configure the one - to - many relationship between ApplicationUser and ParkedVehicle
             modelBuilder.Entity<ParkedVehicle>()
                 .HasOne(pv => pv.User)               // Each ParkedVehicle belongs to one ApplicationUser
                 .WithMany(u => u.Vehicles)           // Each ApplicationUser can have many ParkedVehicles
@@ -58,11 +58,11 @@ namespace Garage301.Data
                 .HasForeignKey<ParkingSpot>(ps => ps.ParkedVehicleId) // Foreign key
                 .IsRequired(false); // It's optional for a ParkingSpot to be occupied
 
-            // Configure uniqueness for Personnummer
-            modelBuilder.Entity<ApplicationUser>()
-                .HasIndex(u => u.Personnummer)
-                .IsUnique()
-                .HasDatabaseName("IX_ApplicationUser_Personnummer");
+            //// Configure uniqueness for Personnummer
+            //modelBuilder.Entity<ApplicationUser>()
+            //    .HasIndex(u => u.Personnummer)
+            //    .IsUnique()
+            //    .HasDatabaseName("Garage301Context");
 
             // Seed data for VehicleTypes
             modelBuilder.Entity<VehicleTypes>().HasData(
@@ -75,11 +75,11 @@ namespace Garage301.Data
             );
 
 
-            // Seed data for ApplicationUsers
-            modelBuilder.Entity<ApplicationUser>().HasData(
-                new ApplicationUser { Id = "user1", FirstName = "user1", LastName = "Ehds", Email = "user1@example.com" },
-                new ApplicationUser { Id = "user2", FirstName = "user2", LastName = "Ehdsafd", Email = "user2@example.com" }
-            );
+            //// Seed data for ApplicationUsers
+            //modelBuilder.Entity<ApplicationUser>().HasData(
+            //    new ApplicationUser { Id = "user1", FirstName = "user1", LastName = "Ehds", Email = "user1@example.com" },
+            //    new ApplicationUser { Id = "user2", FirstName = "user2", LastName = "Ehdsafd", Email = "user2@example.com" }
+            //);
 
             // Seed data for ParkedVehicle with only foreign keys specified
             modelBuilder.Entity<ParkedVehicle>().HasData(

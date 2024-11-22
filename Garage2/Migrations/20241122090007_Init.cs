@@ -34,7 +34,7 @@ namespace Garage301.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Personnummer = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Personnummer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -205,7 +205,7 @@ namespace Garage301.Migrations
                         column: x => x.VehicleTypesId,
                         principalTable: "VehicleTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -231,11 +231,11 @@ namespace Garage301.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Personnummer", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "user1", 0, "97dfbe7d-13d4-4c88-b253-a4d08deb6f75", "user1@example.com", false, "user1", "Ehds", false, null, null, null, null, null, false, "bf068dcf-f15e-4d34-8d27-96535bcd2b0c", false, null },
-                    { "user2", 0, "8bde5c94-e600-4c10-89ec-803f246e18ca", "user2@example.com", false, "user2", "Ehdsafd", false, null, null, null, null, null, false, "f360becc-c528-43f2-8f1f-cc72eb4acf75", false, null }
+                    { "user1", 0, "604eb3a5-3f4b-4329-aaf4-9135da3b21b2", "user1@example.com", false, "user1", "Ehds", false, null, null, null, null, "", null, false, "c33f0c02-1a2e-44d2-83b5-42fa7af45f8e", false, null },
+                    { "user2", 0, "cd98163e-00fa-4345-9932-537dc0a4e6fa", "user2@example.com", false, "user2", "Ehdsafd", false, null, null, null, null, "", null, false, "19ed55a7-1ea3-4f89-a441-bb27d923bc0a", false, null }
                 });
 
             migrationBuilder.InsertData(
@@ -275,19 +275,11 @@ namespace Garage301.Migrations
                 columns: new[] { "Id", "ApplicationUserId", "ArrivalTime", "CheckoutTime", "Color", "Make", "Model", "NumberOfWheels", "ParkingSpotId", "RegistrationNumber", "VehicleTypesId" },
                 values: new object[,]
                 {
-<<<<<<<< HEAD:Garage2/Migrations/20241121203908_Init.cs
-                    { 1, "user1", new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3940), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
-                    { 2, "user2", new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3947), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
-                    { 3, "user2", new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3951), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
-                    { 4, "user1", new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3955), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
-                    { 5, "user2", new DateTime(2024, 11, 21, 19, 39, 8, 78, DateTimeKind.Local).AddTicks(3958), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
-========
-                    { 1, null, new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(127), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
-                    { 2, null, new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(136), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
-                    { 3, null, new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(143), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
-                    { 4, null, new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(149), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
-                    { 5, null, new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(156), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
->>>>>>>> e25aeba7509576dd545ba9f66d37262ec5346052:Garage2/Migrations/20241122081454_Init.cs
+                    { 1, "user1", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5632), null, "Blue", "Toyota", "Corolla", 4, null, "ABC123", 1 },
+                    { 2, "user2", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5639), null, "Green", "Hyundai", "i3", 4, null, "ERT234", 1 },
+                    { 3, "user2", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5643), null, "Black", "BMW", "M3", 4, null, "ERR134", 1 },
+                    { 4, "user1", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5647), null, "Red", "Honda", "Goldwing", 2, null, "HFF577", 2 },
+                    { 5, "user2", new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5651), null, "Green", "Yamaha", "R1", 2, null, "OOP123", 2 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -321,12 +313,6 @@ namespace Garage301.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUser_Personnummer",
-                table: "AspNetUsers",
-                column: "Personnummer",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
