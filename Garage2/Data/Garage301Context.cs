@@ -75,11 +75,11 @@ namespace Garage301.Data
             );
 
 
-            //// Seed data for ApplicationUsers
-            //modelBuilder.Entity<ApplicationUser>().HasData(
-            //    new ApplicationUser { Id = "user1", FirstName = "user1", LastName = "Ehds", Email = "user1@example.com" },
-            //    new ApplicationUser { Id = "user2", FirstName = "user2", LastName = "Ehdsafd", Email = "user2@example.com" }
-            //);
+            // Seed data for ApplicationUsers
+            modelBuilder.Entity<ApplicationUser>().HasData(
+                new ApplicationUser { Id = "user1", FirstName = "user1", LastName = "Ehds", Email = "user1@example.com" },
+                new ApplicationUser { Id = "user2", FirstName = "user2", LastName = "Ehdsafd", Email = "user2@example.com" }
+            );
 
             // Seed data for ParkedVehicle with only foreign keys specified
             modelBuilder.Entity<ParkedVehicle>().HasData(
