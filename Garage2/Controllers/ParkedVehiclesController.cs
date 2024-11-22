@@ -515,6 +515,8 @@ namespace Garage301.Controllers
             var stats = new Stats
             {
                 TotalVehicles = await _context.ParkedVehicle.CountAsync(),
+                AvailableSpots = await _context.ParkingSpot.CountAsync(ps => ps.IsOccupied == false),
+                OccupiedSpots = await _context.ParkingSpot.CountAsync(ps => ps.IsOccupied == true),
                 Motorcycles = await _context.ParkedVehicle.CountAsync(v => v.VehicleTypesId == 2), // Assuming 2 is Motorcycle
                 Cars = await _context.ParkedVehicle.CountAsync(v => v.VehicleTypesId == 1),        // Assuming 1 is Car
                 Trucks = await _context.ParkedVehicle.CountAsync(v => v.VehicleTypesId == 3),
