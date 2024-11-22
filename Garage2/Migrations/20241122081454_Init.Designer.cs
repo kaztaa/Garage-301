@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage301.Migrations
 {
     [DbContext(typeof(Garage301Context))]
-    [Migration("20241121230918_AddedPersonNummer")]
-    partial class AddedPersonNummer
+    [Migration("20241122081454_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,7 +162,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 1,
-                            ArrivalTime = new DateTime(2024, 11, 21, 22, 9, 17, 836, DateTimeKind.Local).AddTicks(4140),
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(127),
                             Color = "Blue",
                             Make = "Toyota",
                             Model = "Corolla",
@@ -173,7 +173,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 2,
-                            ArrivalTime = new DateTime(2024, 11, 21, 22, 9, 17, 836, DateTimeKind.Local).AddTicks(4148),
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(136),
                             Color = "Green",
                             Make = "Hyundai",
                             Model = "i3",
@@ -184,7 +184,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 3,
-                            ArrivalTime = new DateTime(2024, 11, 21, 22, 9, 17, 836, DateTimeKind.Local).AddTicks(4153),
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(143),
                             Color = "Black",
                             Make = "BMW",
                             Model = "M3",
@@ -195,7 +195,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 4,
-                            ArrivalTime = new DateTime(2024, 11, 21, 22, 9, 17, 836, DateTimeKind.Local).AddTicks(4157),
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(149),
                             Color = "Red",
                             Make = "Honda",
                             Model = "Goldwing",
@@ -206,7 +206,7 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 5,
-                            ArrivalTime = new DateTime(2024, 11, 21, 22, 9, 17, 836, DateTimeKind.Local).AddTicks(4161),
+                            ArrivalTime = new DateTime(2024, 11, 22, 7, 14, 53, 341, DateTimeKind.Local).AddTicks(156),
                             Color = "Green",
                             Make = "Yamaha",
                             Model = "R1",
