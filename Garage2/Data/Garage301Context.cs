@@ -76,18 +76,9 @@ namespace Garage301.Data
 
 
             //// Seed data for ApplicationUsers
-            //modelBuilder.Entity<ApplicationUser>().HasData(
-            //    new ApplicationUser { Id = "user1", FirstName = "user1", LastName = "Ehds", Email = "user1@example.com" },
-            //    new ApplicationUser { Id = "user2", FirstName = "user2", LastName = "Ehdsafd", Email = "user2@example.com" }
-            //);
-
-            // Seed data for ParkedVehicle with only foreign keys specified
-            modelBuilder.Entity<ParkedVehicle>().HasData(
-                new ParkedVehicle { Id = 1, VehicleTypesId = 1, RegistrationNumber = "ABC123", Color = "Blue", Make = "Toyota", Model = "Corolla", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user1" },
-                new ParkedVehicle { Id = 2, VehicleTypesId = 1, RegistrationNumber = "ERT234", Color = "Green", Make = "Hyundai", Model = "i3", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user2" },
-                new ParkedVehicle { Id = 3, VehicleTypesId = 1, RegistrationNumber = "ERR134", Color = "Black", Make = "BMW", Model = "M3", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user2" },
-                new ParkedVehicle { Id = 4, VehicleTypesId = 2, RegistrationNumber = "HFF577", Color = "Red", Make = "Honda", Model = "Goldwing", NumberOfWheels = 2, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user1" },
-                new ParkedVehicle { Id = 5, VehicleTypesId = 2, RegistrationNumber = "OOP123", Color = "Green", Make = "Yamaha", Model = "R1", NumberOfWheels = 2, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user2" }
+            modelBuilder.Entity<ApplicationUser>().HasData(
+                new ApplicationUser { Id = "user1", FirstName = "user1", LastName = "Ehds", Email = "user1@example.com" },
+                new ApplicationUser { Id = "user2", FirstName = "user2", LastName = "Ehdsafd", Email = "user2@example.com" }
             );
 
             // Seed data for ParkingSpot
@@ -97,9 +88,21 @@ namespace Garage301.Data
                 {
                     Id = i,
                     SpotNumber = i,
-                    IsOccupied = false
+                    IsOccupied = i <= 5, // Assuming first 5 spots are occupied by vehicles (change as needed)
+                    Location = $"Location {i}",
+                    ParkedVehicleId = i <= 5 ? i : (int?)null // Assign ParkedVehicleId for first 5 spots, else null
                 });
             }
+
+            // Seed data for ParkedVehicle with ParkingSpot assignments
+            modelBuilder.Entity<ParkedVehicle>().HasData(
+                new ParkedVehicle { Id = 1, VehicleTypesId = 1, RegistrationNumber = "ABC123", Color = "Blue", Make = "Toyota", Model = "Corolla", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user1", ParkingSpotId = 1 },
+                new ParkedVehicle { Id = 2, VehicleTypesId = 1, RegistrationNumber = "ERT234", Color = "Green", Make = "Hyundai", Model = "i3", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user2", ParkingSpotId = 2 },
+                new ParkedVehicle { Id = 3, VehicleTypesId = 1, RegistrationNumber = "ERR134", Color = "Black", Make = "BMW", Model = "M3", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user2", ParkingSpotId = 3 },
+                new ParkedVehicle { Id = 4, VehicleTypesId = 2, RegistrationNumber = "HFF577", Color = "Red", Make = "Honda", Model = "Goldwing", NumberOfWheels = 2, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user1", ParkingSpotId = 4 },
+                new ParkedVehicle { Id = 5, VehicleTypesId = 2, RegistrationNumber = "OOP123", Color = "Green", Make = "Yamaha", Model = "R1", NumberOfWheels = 2, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user2", ParkingSpotId = 5 }
+            );
+
         }
     }
 }

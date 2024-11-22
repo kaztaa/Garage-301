@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage301.Migrations
 {
     [DbContext(typeof(Garage301Context))]
-    [Migration("20241122090007_Init")]
+    [Migration("20241122113816_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -106,7 +106,7 @@ namespace Garage301.Migrations
                         {
                             Id = "user1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "604eb3a5-3f4b-4329-aaf4-9135da3b21b2",
+                            ConcurrencyStamp = "ee0dfa32-36c6-4cb6-9697-6dadb4571646",
                             Email = "user1@example.com",
                             EmailConfirmed = false,
                             FirstName = "user1",
@@ -114,14 +114,14 @@ namespace Garage301.Migrations
                             LockoutEnabled = false,
                             Personnummer = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c33f0c02-1a2e-44d2-83b5-42fa7af45f8e",
+                            SecurityStamp = "eed1cfd9-e6bb-4746-8e4f-3ada13a1c0d0",
                             TwoFactorEnabled = false
                         },
                         new
                         {
                             Id = "user2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cd98163e-00fa-4345-9932-537dc0a4e6fa",
+                            ConcurrencyStamp = "cae0ee41-7828-42df-b5f5-94f1b314f29f",
                             Email = "user2@example.com",
                             EmailConfirmed = false,
                             FirstName = "user2",
@@ -129,7 +129,7 @@ namespace Garage301.Migrations
                             LockoutEnabled = false,
                             Personnummer = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "19ed55a7-1ea3-4f89-a441-bb27d923bc0a",
+                            SecurityStamp = "53e5ce0a-97be-4104-b448-74956613841f",
                             TwoFactorEnabled = false
                         });
                 });
@@ -192,11 +192,12 @@ namespace Garage301.Migrations
                         {
                             Id = 1,
                             ApplicationUserId = "user1",
-                            ArrivalTime = new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5632),
+                            ArrivalTime = new DateTime(2024, 11, 22, 10, 38, 15, 871, DateTimeKind.Local).AddTicks(5074),
                             Color = "Blue",
                             Make = "Toyota",
                             Model = "Corolla",
                             NumberOfWheels = 4,
+                            ParkingSpotId = 1,
                             RegistrationNumber = "ABC123",
                             VehicleTypesId = 1
                         },
@@ -204,11 +205,12 @@ namespace Garage301.Migrations
                         {
                             Id = 2,
                             ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5639),
+                            ArrivalTime = new DateTime(2024, 11, 22, 10, 38, 15, 871, DateTimeKind.Local).AddTicks(5081),
                             Color = "Green",
                             Make = "Hyundai",
                             Model = "i3",
                             NumberOfWheels = 4,
+                            ParkingSpotId = 2,
                             RegistrationNumber = "ERT234",
                             VehicleTypesId = 1
                         },
@@ -216,11 +218,12 @@ namespace Garage301.Migrations
                         {
                             Id = 3,
                             ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5643),
+                            ArrivalTime = new DateTime(2024, 11, 22, 10, 38, 15, 871, DateTimeKind.Local).AddTicks(5086),
                             Color = "Black",
                             Make = "BMW",
                             Model = "M3",
                             NumberOfWheels = 4,
+                            ParkingSpotId = 3,
                             RegistrationNumber = "ERR134",
                             VehicleTypesId = 1
                         },
@@ -228,11 +231,12 @@ namespace Garage301.Migrations
                         {
                             Id = 4,
                             ApplicationUserId = "user1",
-                            ArrivalTime = new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5647),
+                            ArrivalTime = new DateTime(2024, 11, 22, 10, 38, 15, 871, DateTimeKind.Local).AddTicks(5090),
                             Color = "Red",
                             Make = "Honda",
                             Model = "Goldwing",
                             NumberOfWheels = 2,
+                            ParkingSpotId = 4,
                             RegistrationNumber = "HFF577",
                             VehicleTypesId = 2
                         },
@@ -240,11 +244,12 @@ namespace Garage301.Migrations
                         {
                             Id = 5,
                             ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 22, 8, 0, 7, 184, DateTimeKind.Local).AddTicks(5651),
+                            ArrivalTime = new DateTime(2024, 11, 22, 10, 38, 15, 871, DateTimeKind.Local).AddTicks(5094),
                             Color = "Green",
                             Make = "Yamaha",
                             Model = "R1",
                             NumberOfWheels = 2,
+                            ParkingSpotId = 5,
                             RegistrationNumber = "OOP123",
                             VehicleTypesId = 2
                         });
@@ -283,73 +288,90 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 1,
-                            IsOccupied = false,
+                            IsOccupied = true,
+                            Location = "Location 1",
+                            ParkedVehicleId = 1,
                             SpotNumber = 1
                         },
                         new
                         {
                             Id = 2,
-                            IsOccupied = false,
+                            IsOccupied = true,
+                            Location = "Location 2",
+                            ParkedVehicleId = 2,
                             SpotNumber = 2
                         },
                         new
                         {
                             Id = 3,
-                            IsOccupied = false,
+                            IsOccupied = true,
+                            Location = "Location 3",
+                            ParkedVehicleId = 3,
                             SpotNumber = 3
                         },
                         new
                         {
                             Id = 4,
-                            IsOccupied = false,
+                            IsOccupied = true,
+                            Location = "Location 4",
+                            ParkedVehicleId = 4,
                             SpotNumber = 4
                         },
                         new
                         {
                             Id = 5,
-                            IsOccupied = false,
+                            IsOccupied = true,
+                            Location = "Location 5",
+                            ParkedVehicleId = 5,
                             SpotNumber = 5
                         },
                         new
                         {
                             Id = 6,
                             IsOccupied = false,
+                            Location = "Location 6",
                             SpotNumber = 6
                         },
                         new
                         {
                             Id = 7,
                             IsOccupied = false,
+                            Location = "Location 7",
                             SpotNumber = 7
                         },
                         new
                         {
                             Id = 8,
                             IsOccupied = false,
+                            Location = "Location 8",
                             SpotNumber = 8
                         },
                         new
                         {
                             Id = 9,
                             IsOccupied = false,
+                            Location = "Location 9",
                             SpotNumber = 9
                         },
                         new
                         {
                             Id = 10,
                             IsOccupied = false,
+                            Location = "Location 10",
                             SpotNumber = 10
                         },
                         new
                         {
                             Id = 11,
                             IsOccupied = false,
+                            Location = "Location 11",
                             SpotNumber = 11
                         },
                         new
                         {
                             Id = 12,
                             IsOccupied = false,
+                            Location = "Location 12",
                             SpotNumber = 12
                         });
                 });
