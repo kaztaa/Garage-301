@@ -17,17 +17,31 @@ namespace Garage301.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult ParkingSpots()
+        public async Task<IActionResult> ParkingSpots(string searchTerm)
         {
-            // Fetching parking spots and sorting them by SpotNumber
-            var parkingSpots = _context.ParkingSpot
+            // Fetching parking spots and sorting them by SpotNumber asynchronously
+            var parkingSpots = await _context.ParkingSpot
                 .OrderBy(p => p.SpotNumber) // Sort by SpotNumber in ascending order
-                .ToList();
+                .ToListAsync();
 
-            // Fetching parked vehicles with their associated VehicleType
-            var parkedVehicles = _context.ParkedVehicle
+            // Fetching parked vehicles with their associated VehicleType asynchronously
+            var parkedVehiclesQuery = _context.ParkedVehicle
                 .Include(v => v.VehicleType)  // Ensure VehicleType is loaded
-                .ToList();
+                .AsQueryable();
+
+            // If search term is provided, filter the results
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                parkedVehiclesQuery = parkedVehiclesQuery.Where(v =>
+                    v.RegistrationNumber.Contains(searchTerm) ||
+                    v.VehicleType.Name.Contains(searchTerm) ||
+                    v.Color.Contains(searchTerm) ||
+                    (v.Make + " " + v.Model).Contains(searchTerm)
+                );
+            }
+
+            // Execute the query and fetch the results asynchronously
+            var parkedVehicles = await parkedVehiclesQuery.ToListAsync();
 
             // Create and populate the view model
             var viewModel = new AdminViewModel
@@ -39,6 +53,7 @@ namespace Garage301.Controllers
             // Return the view with the populated model
             return View("Admin", viewModel);
         }
+
 
 
 

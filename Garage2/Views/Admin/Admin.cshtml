@@ -54,9 +54,18 @@
             </form>
         </div>
 
+        <h2 class="text-2xl font-bold mb-4">Manage Parked Vehicles</h2>
+        <!-- Search Form -->
+        <form method="get" asp-action="ParkingSpots" class="mb-4">
+            <input type="text"
+                   name="searchTerm"
+                   value="@ViewData["searchTerm"]"
+                   class="border border-gray-300 px-4 py-2 rounded"
+                   placeholder="Search by registration, vehicle type, color, make, or model" />
+            <button type="submit" class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Search</button>
+        </form>
 
-        <h2 class="text-2xl font-bold mt-8 mb-4">Manage Parked Vehicles</h2>
-
+        <!-- Table displaying parked vehicles -->
         <table class="table-auto w-full border-collapse border border-gray-300">
             <thead>
                 <tr class="bg-gray-200">
