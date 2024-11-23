@@ -383,10 +383,22 @@ namespace Garage301.Controllers
                         return NotFound();
                     }
 
+                    // Check if the registration number already exists in the database (excluding the current vehicle)
+                    var registrationExists = await _context.ParkedVehicle
+                        .AnyAsync(v => v.RegistrationNumber == viewModel.RegistrationNumber && v.Id != id);
+
+                    if (registrationExists)
+                    {
+                        // Add a model error if the registration number is already taken
+                        ModelState.AddModelError("RegistrationNumber", "The registration number is already in use.");
+                        viewModel.VehicleTypes = new SelectList(await _context.VehicleTypes.ToListAsync(), "Id", "Name", viewModel.VehicleTypesId);
+                        viewModel.ParkingSpots = new SelectList(await _context.ParkingSpot.Where(s => !s.IsOccupied || s.Id == viewModel.ParkingSpotId).ToListAsync(), "Id", "SpotNumber", viewModel.ParkingSpotId);
+                        return View(viewModel);
+                    }
+
                     // Handle changes to ParkingSpotId
                     if (existingVehicle.ParkingSpotId != viewModel.ParkingSpotId)
                     {
-
                         // Assign new parking spot and mark it as occupied
                         if (viewModel.ParkingSpotId.HasValue)
                         {
@@ -401,15 +413,6 @@ namespace Garage301.Controllers
                                     _context.Update(existingVehicle.ParkingSpot);
                                 }
                                 newParkingSpot.IsOccupied = true;
-                                //newParkingSpot.ParkedVehicle = new ParkedVehicle();
-                                //newParkingSpot.ParkedVehicle.Id = existingVehicle.Id;
-                                //newParkingSpot.ParkedVehicle.VehicleTypesId = existingVehicle.VehicleTypesId;
-                                //newParkingSpot.ParkedVehicle.Color = existingVehicle.Color;
-                                //newParkingSpot.ParkedVehicle.Make = existingVehicle.Make;
-                                //newParkingSpot.ParkedVehicle.Model = existingVehicle.Model;
-                                //newParkingSpot.ParkedVehicle.NumberOfWheels = existingVehicle.NumberOfWheels;
-                                //newParkingSpot.ParkedVehicle.ArrivalTime = existingVehicle.ArrivalTime;
-                                //newParkingSpot.ParkedVehicle.ParkingSpotId = existingVehicle.ParkingSpotId;
                                 _context.Update(newParkingSpot);
                                 existingVehicle.ParkingSpot = newParkingSpot;
                             }
@@ -456,6 +459,7 @@ namespace Garage301.Controllers
 
             return View(viewModel);
         }
+
 
 
 
