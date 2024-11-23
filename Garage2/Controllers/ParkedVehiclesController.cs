@@ -386,12 +386,6 @@ namespace Garage301.Controllers
                     // Handle changes to ParkingSpotId
                     if (existingVehicle.ParkingSpotId != viewModel.ParkingSpotId)
                     {
-                        // If there was a previous parking spot, mark it as not occupied
-                        if (existingVehicle.ParkingSpot != null)
-                        {
-                            existingVehicle.ParkingSpot.IsOccupied = false;
-                            _context.Update(existingVehicle.ParkingSpot);
-                        }
 
                         // Assign new parking spot and mark it as occupied
                         if (viewModel.ParkingSpotId.HasValue)
@@ -399,8 +393,25 @@ namespace Garage301.Controllers
                             var newParkingSpot = await _context.ParkingSpot.FindAsync(viewModel.ParkingSpotId);
                             if (newParkingSpot != null && !newParkingSpot.IsOccupied)
                             {
+                                // If there was a previous parking spot, mark it as not occupied
+                                if (existingVehicle.ParkingSpot != null)
+                                {
+                                    existingVehicle.ParkingSpot.IsOccupied = false;
+                                    existingVehicle.ParkingSpot.ParkedVehicle = null;
+                                    _context.Update(existingVehicle.ParkingSpot);
+                                }
                                 newParkingSpot.IsOccupied = true;
+                                //newParkingSpot.ParkedVehicle = new ParkedVehicle();
+                                //newParkingSpot.ParkedVehicle.Id = existingVehicle.Id;
+                                //newParkingSpot.ParkedVehicle.VehicleTypesId = existingVehicle.VehicleTypesId;
+                                //newParkingSpot.ParkedVehicle.Color = existingVehicle.Color;
+                                //newParkingSpot.ParkedVehicle.Make = existingVehicle.Make;
+                                //newParkingSpot.ParkedVehicle.Model = existingVehicle.Model;
+                                //newParkingSpot.ParkedVehicle.NumberOfWheels = existingVehicle.NumberOfWheels;
+                                //newParkingSpot.ParkedVehicle.ArrivalTime = existingVehicle.ArrivalTime;
+                                //newParkingSpot.ParkedVehicle.ParkingSpotId = existingVehicle.ParkingSpotId;
                                 _context.Update(newParkingSpot);
+                                existingVehicle.ParkingSpot = newParkingSpot;
                             }
                             else
                             {

@@ -17,6 +17,28 @@ namespace Garage301.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        public IActionResult ManageParkingSpots(string searchTerm)
+        {
+            // Fetch parking spots from the database (use your data access logic here)
+            var parkingSpots = _context.ParkingSpot.Include(ps => ps.ParkedVehicle).ToList();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                // Perform case-insensitive search by spot number or location
+                parkingSpots = parkingSpots.Where(ps =>
+                    ps.SpotNumber.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    ps.Location.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                ).ToList();
+            }
+
+            // Set the search term to the ViewData to retain the value in the search field
+            ViewData["searchTerm"] = searchTerm;
+
+            return View(parkingSpots);
+        }
+
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ParkingSpots(string searchTerm)
         {
             // Fetching parking spots and sorting them by SpotNumber asynchronously
