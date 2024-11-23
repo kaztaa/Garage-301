@@ -102,7 +102,7 @@ namespace Garage301.Controllers
             {
                 SpotNumber = nextAvailableSpotNumber,
                 IsOccupied = false,
-                Location = $"Section {nextAvailableSpotNumber}"
+                Location = $"Location {nextAvailableSpotNumber}"
             };
 
             // Add the new spot to the database and save changes

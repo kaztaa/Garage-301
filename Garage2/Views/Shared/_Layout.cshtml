@@ -42,8 +42,9 @@
 
                     @if (User.IsInRole("Admin"))
                     {
-                        <a class="nav-link text-dark hover:text-red-500" asp-area="" asp-controller="Admin">Admin</a>
+                        <a href="/Admin" class="nav-link text-dark hover:text-red-500">Admin</a>
                     }
+
 
                     <a class="nav-link text-dark hover:text-red-500" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                 </div>
