@@ -1,8 +1,11 @@
 ﻿@using System.Security.Claims
-@model Garage301.Models.ViewModels.RoleIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
+    var vehicles = ViewData["Vehicles"] as List<Garage301.Models.ParkedVehicle>; // Assuming you have the vehicle list here
+    var parkingSpots = ViewData["ParkingSpots"] as List<Garage301.Models.ParkingSpot>; // Assuming you have the parking spots here
+    var currentFilter = ViewData["CurrentFilter"];
+    var currentType = ViewData["CurrentType"];
 }
 
 <div class="mt-10 flex flex-col items-center justify-center px-4">
@@ -14,9 +17,9 @@
 
     <form asp-action="Index" class="w-full max-w-lg">
         <div class="flex flex-col space-y-3 md:space-y-0 md:flex-row md:space-x-3">
-            <input type="text" class="w-full rounded-md border p-2" name="searchField" value="@ViewData["CurrentFilter"]" placeholder="Search..." />
+            <input type="text" class="w-full rounded-md border p-2" name="searchField" value="@currentFilter" placeholder="Search..." />
 
-            <select class="rounded-md border p-2" name="type" value="@ViewData["CurrentType"]">
+            <select class="rounded-md border p-2" name="type" value="@currentType">
                 <option value="1">Registration Number</option>
                 <option value="2">Vehicle Type</option>
                 <option value="3">Color</option>
@@ -24,7 +27,7 @@
                 <option value="5">Model</option>
             </select>
 
-            <button class="rounded bg-gray-700 px-4 py-2 text-white hover:bg-gray-600" type="submit" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-currentType="@ViewData["CurrentType"]">Search</button>
+            <button class="rounded bg-gray-700 px-4 py-2 text-white hover:bg-gray-600" type="submit" asp-route-currentFilter="@currentFilter" asp-route-currentType="@currentType">Search</button>
         </div>
     </form>
     <div class="mt-12">
@@ -35,30 +38,29 @@
         <thead>
             <tr class="bg-gray-100">
                 <th class="border-b p-3 text-left">
-                    <a class="text-gray-700 hover:text-gray-900" asp-action="Index" asp-route-sortBy="@ViewData["TypeSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-currentType="@ViewData["CurrentType"]">
+                    <a class="text-gray-700 hover:text-gray-900" asp-action="Index" asp-route-sortBy="type_asc" asp-route-currentFilter="@currentFilter" asp-route-currentType="@currentType">
                         Vehicle Type
                     </a>
                 </th>
                 <th class="border-b p-3 text-left">
-                    <a class="text-gray-700 hover:text-gray-900" asp-action="Index" asp-route-sortBy="@ViewData["RegNrSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-currentType="@ViewData["CurrentType"]">
+                    <a class="text-gray-700 hover:text-gray-900" asp-action="Index" asp-route-sortBy="regNr_asc" asp-route-currentFilter="@currentFilter" asp-route-currentType="@currentType">
                         Registration Number
                     </a>
                 </th>
                 <th class="border-b p-3 text-left">
-                    <a class="text-gray-700 hover:text-gray-900" asp-action="Index" asp-route-sortBy="@ViewData["ArrivalTimeSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-currentType="@ViewData["CurrentType"]">
+                    <a class="text-gray-700 hover:text-gray-900" asp-action="Index" asp-route-sortBy="at_asc" asp-route-currentFilter="@currentFilter" asp-route-currentType="@currentType">
                         Arrival Time
                     </a>
                 </th>
                 <th class="border-b p-3 text-left">
-                    <a class="text-gray-700 hover:text-gray-900" asp-action="Index" asp-route-sortBy="@ViewData["ParkedDurationSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-currentType="@ViewData["CurrentType"]">
-                        Parked Duration
-                    </a>
+                    Parked Duration
                 </th>
                 <th class="border-b p-3"></th>
             </tr>
         </thead>
+
         <tbody>
-            @foreach (var item in Model.Vehicles) // Use ViewModel's property (list of vehicles)
+            @foreach (var item in vehicles)
             {
                 <tr class="hover:bg-gray-100">
                     <td class="border-b p-3">@Html.DisplayFor(modelItem => item.VehicleType.Name)</td>
@@ -67,11 +69,8 @@
                     <td class="border-b p-3">@Html.DisplayFor(modelItem => item.ParkedDuration)</td>
                     <td class="border-b p-3">
                         <div class="flex space-x-2 w-full">
-                            <!-- Edit and Checkout buttons for all vehicles, enabled/disabled as needed -->
                             <a asp-action="Edit" asp-route-id="@item.Id" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-indigo-600" aria-disabled="false">Edit</a>
                             <a asp-action="CheckOut" asp-route-id="@item.Id" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-600" aria-disabled="false">Checkout</a>
-
-                            <!-- Always Visible Details Button -->
                             <a asp-action="Details" asp-route-id="@item.Id" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600" aria-disabled="false">Details</a>
                         </div>
                     </td>
@@ -84,7 +83,7 @@
     <div class="my-20">
         <h2 class="mb-4 text-center text-2xl font-bold">Available Parking Spots</h2>
         <div class="grid-cols-4 grid gap-4">
-            @foreach (var spot in Model.ParkingSpots) // Use ViewModel's property
+            @foreach (var spot in parkingSpots)
             {
                 <div class="rounded px-5 py-4 text-center text-white @(spot.IsOccupied ? "bg-red-500" : "bg-green-500")">
                     <p>Spot: @spot.SpotNumber</p>

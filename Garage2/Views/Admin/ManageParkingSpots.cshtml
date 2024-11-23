@@ -8,16 +8,41 @@
     <div class="w-full max-w-5xl bg-white p-8 shadow-md rounded-lg">
         <h2 class="text-2xl font-bold mb-4">@ViewData["Title"]</h2>
 
+        <!-- Add Search Form if needed -->
+        <form method="get" asp-action="ParkingSpots" class="mb-4">
+            <input type="text"
+                   name="searchTerm"
+                   value="@ViewData["searchTerm"]"
+                   class="border border-gray-300 px-4 py-2 rounded"
+                   placeholder="Search by Spot Number, Location, or Vehicle Registration" />
+            <button type="submit" class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Search</button>
+        </form>
+
         <table class="table-auto w-full border-collapse border border-gray-300">
             <thead>
                 <tr class="bg-gray-200">
-                    <th class="border border-gray-300 px-4 py-2">Spot Number</th>
-                    <th class="border border-gray-300 px-4 py-2">Status</th>
-                    <th class="border border-gray-300 px-4 py-2">Assigned Vehicle</th>
-                    <th class="border border-gray-300 px-4 py-2">Location</th>
-                    <th class="border border-gray-300 px-4 py-2">Actions</th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">
+                        <a href="@Url.Action("ManageParkingSpots", new { sortBy = "SpotNumber", sortDirection = ViewData["SortDirection"] as string == "asc" ? "desc" : "asc" })">
+                            Spot Number
+                        </a>
+                    </th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">
+                        <a href="@Url.Action("ManageParkingSpots", new { sortBy = "Status", sortDirection = ViewData["SortDirection"] as string == "asc" ? "desc" : "asc" })">
+                            Status
+                        </a>
+                    </th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">
+                        <a href="@Url.Action("ManageParkingSpots", new { sortBy = "Registration Number", sortDirection = ViewData["SortDirection"] as string == "asc" ? "desc" : "asc" })">
+                            Registration Number
+                        </a>
+                    </th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">
+                        Location
+                    </th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">Actions</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach (var spot in Model)
                 {
@@ -39,15 +64,16 @@
                                 <a asp-action="Details" asp-route-id="@spot.ParkedVehicle.Id" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 w-full inline-block">Details</a>
                             }
                         </td>
-
                     </tr>
                 }
             </tbody>
-            <div class="mt-4 mb-6 flex justify-center">
-                <form method="post" asp-action="IncreaseParkingSpots" asp-controller="Admin">
-                    <button class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Add Parking Spot</button>
-                </form>
-            </div>
         </table>
+
+        <!-- Add Parking Spot Form -->
+        <div class="mt-4 mb-6 flex justify-center">
+            <form method="post" asp-action="IncreaseParkingSpots" asp-controller="Admin">
+                <button class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Add Parking Spot</button>
+            </form>
+        </div>
     </div>
 </div>

@@ -25,113 +25,45 @@ namespace Garage301.Controllers
             _userManager = userManager;
         }
 
-        // GET: ParkedVehicles
-        [Authorize]
         public async Task<IActionResult> Index(string searchField, int type, string sortBy, string currentFilter, int currentType)
         {
-            if(User.IsInRole("Admin"))
+            // Redirect admin users
+            if (User.IsInRole("Admin"))
             {
                 return RedirectToAction("Index", "Admin");
             }
-            //var vehicles = await _context.ParkedVehicle.Include(v => v.ParkingSpot).Include(v => v.VehicleType).ToListAsync();
-            //ViewData["TypeSortParam"] = sortBy == "type_desc" ? "type_asc" : "type_desc";
-            //ViewData["RegNrSortParam"] = sortBy == "regNr_desc" ? "regNr_asc" : "regNr_desc";
-            //ViewData["ArrivalTimeSortParam"] = sortBy == "at_desc" ? "at_asc" : "at_desc";
-            //ViewData["ParkedDurationSortParam"] = sortBy == "pd_desc" ? "pd_asc" : "pd_desc";
 
-            //if (string.IsNullOrEmpty(searchField))
-            //{
-            //    searchField = currentFilter;
-            //}
-            //if (type == 0)
-            //{
-            //    type = currentType;
-            //}
-
-            //ViewData["CurrentFilter"] = searchField;
-            //ViewData["CurrentType"] = type;
-
-            //if (!string.IsNullOrEmpty(searchField))
-            //{
-            //    searchField = searchField.ToUpper();
-            //    vehicles = vehicles.Where(e =>
-            //        (type == 1 && e.RegistrationNumber.ToUpper().Contains(searchField)) ||
-            //        (type == 2 && e.VehicleType.Name.ToUpper() == searchField) ||
-            //        (type == 3 && e.Color.ToUpper() == searchField) ||
-            //        (type == 4 && e.Make.ToUpper() == searchField) ||
-            //        (type == 5 && e.Model.ToUpper() == searchField)
-            //    ).ToList();
-            //}
-
-            //switch (sortBy)
-            //{
-            //    case "type_desc":
-            //        vehicles = vehicles.OrderByDescending(e => e.VehicleType.Name).ToList();
-            //        break;
-            //    case "type_asc":
-            //        vehicles = vehicles.OrderBy(e => e.VehicleType.Name).ToList();
-            //        break;
-            //    case "regNr_desc":
-            //        vehicles = vehicles.OrderByDescending(e => e.RegistrationNumber).ToList();
-            //        break;
-            //    case "regNr_asc":
-            //        vehicles = vehicles.OrderBy(e => e.RegistrationNumber).ToList();
-            //        break;
-            //    case "at_desc":
-            //        vehicles = vehicles.OrderByDescending(e => e.ArrivalTime).ToList();
-            //        break;
-            //    case "at_asc":
-            //        vehicles = vehicles.OrderBy(e => e.ArrivalTime).ToList();
-            //        break;
-            //    case "pt_desc":
-            //        vehicles = vehicles.OrderByDescending(e => e.ParkedDuration).ToList();
-            //        break;
-            //    case "pt_asc":
-            //        vehicles = vehicles.OrderBy(e => e.ParkedDuration).ToList();
-            //        break;
-            //}
-
-            //ViewData["ParkingSpots"] = await _context.ParkingSpot.OrderBy(s => s.SpotNumber).ToListAsync();
-            //return View(vehicles);
-
-            // If the searchField is null or empty, fallback to the currentFilter
-            // If the searchField is null or empty, fallback to the currentFilter
-            // If the searchField is null or empty, fallback to the currentFilter
+            // Set up searchField and type fallback
             if (string.IsNullOrEmpty(searchField))
             {
                 searchField = currentFilter;
             }
-
-            // If type is 0, fallback to the currentType
             if (type == 0)
             {
                 type = currentType;
             }
 
-            // Get the current user's role (assuming a method that fetches the user's role)
-            var isAdmin = User.IsInRole("Admin"); // You can replace this with your own method of role checking
+            var isAdmin = User.IsInRole("Admin");
 
-            // Start the base query for vehicles, including necessary related entities (VehicleType, ParkingSpot)
             var query = _context.ParkedVehicle
                                 .Include(v => v.ParkingSpot)
                                 .Include(v => v.VehicleType)
                                 .AsQueryable();
 
+            // Filter for non-admin users
             if (!isAdmin)
             {
                 var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
                 if (!string.IsNullOrEmpty(currentUserId))
                 {
-                    query = query.Where(e => e.ApplicationUserId == currentUserId); // Assuming `UserId` is the foreign key on `ParkedVehicle`
+                    query = query.Where(e => e.ApplicationUserId == currentUserId);
                 }
             }
 
-
-            // Apply the search filter
+            // Apply search filter if needed
             if (!string.IsNullOrEmpty(searchField))
             {
-                searchField = searchField.ToUpper(); // Ensure case-insensitive search
+                searchField = searchField.ToUpper();
                 query = query.Where(e =>
                     (type == 1 && e.RegistrationNumber.ToUpper().Contains(searchField)) ||
                     (type == 2 && e.VehicleType.Name.ToUpper() == searchField) ||
@@ -141,7 +73,7 @@ namespace Garage301.Controllers
                 );
             }
 
-            // Apply sorting
+            // Sorting logic
             switch (sortBy)
             {
                 case "type_desc":
@@ -162,35 +94,36 @@ namespace Garage301.Controllers
                 case "at_asc":
                     query = query.OrderBy(e => e.ArrivalTime);
                     break;
-                case "pt_desc":
-                    query = query.OrderByDescending(e => e.ParkedDuration);
-                    break;
-                case "pt_asc":
-                    query = query.OrderBy(e => e.ParkedDuration);
-                    break;
                 default:
-                    query = query.OrderBy(e => e.RegistrationNumber); // Default sorting
+                    query = query.OrderBy(e => e.RegistrationNumber);
                     break;
             }
 
-            // Fetch the filtered and sorted vehicles from the database
+            // Fetch the list of vehicles (with optional sorting already applied)
             var vehicles = await query.ToListAsync();
 
-            // Prepare the view model
-            var viewModel = new RoleIndexViewModel
-            {
-                Vehicles = vehicles,
-                SearchField = searchField,
-                CurrentFilter = currentFilter,
-                CurrentType = type,
-                SortBy = sortBy
-            };
-
             // Fetch parking spots for display
-            viewModel.ParkingSpots = await _context.ParkingSpot.OrderBy(s => s.SpotNumber).ToListAsync();
+            var parkingSpots = await _context.ParkingSpot.OrderBy(s => s.SpotNumber).ToListAsync();
 
-            return View(viewModel);
+            // Pass data to the view using ViewData
+            ViewData["Vehicles"] = vehicles;
+            ViewData["SearchField"] = searchField;
+            ViewData["CurrentFilter"] = currentFilter;
+            ViewData["CurrentType"] = type;
+            ViewData["SortBy"] = sortBy;
+            ViewData["ParkingSpots"] = parkingSpots;
+
+            // Sorting parameters for the view
+            ViewData["TypeSortParam"] = "type_asc"; // Default sorting
+            ViewData["RegNrSortParam"] = "regNr_asc"; // Default sorting
+            ViewData["ArrivalTimeSortParam"] = "at_asc"; // Default sorting
+
+            return View();
         }
+
+
+
+
 
 
         // GET: ParkedVehicles/Details/5
