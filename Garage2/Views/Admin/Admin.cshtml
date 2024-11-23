@@ -1,117 +1,21 @@
-﻿@model Garage301.Models.ViewModels.AdminViewModel
-
-@{
+﻿@{
     ViewData["Title"] = "Manage Parking Spots & Vehicles";
 }
 
 <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="w-full max-w-5xl bg-white p-8 shadow-md rounded-lg">
-        <h2 class="text-2xl font-bold mb-4">Manage Parking Spots</h2>
+        <h2 class="text-2xl font-bold mb-6 text-center">Manage Parking</h2>
 
-        <table class="table-auto w-full border-collapse border border-gray-300">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="border border-gray-300 px-4 py-2">Spot Number</th>
-                    <th class="border border-gray-300 px-4 py-2">Occupied</th>
-                    <th class="border border-gray-300 px-4 py-2">Assigned Vehicle</th>
-                    <th class="border border-gray-300 px-4 py-2">Location</th>
-                    <th class="border border-gray-300 px-4 py-2">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.ParkingSpots != null && Model.ParkingSpots.Any())
-                {
-                    @foreach (var spot in Model.ParkingSpots)
-                    {
-                        <tr class="@(spot.IsOccupied ? "bg-red-500 text-white" : "bg-green-500 text-white")">
-                            <td class="border border-gray-300 px-4 py-2 text-center">@spot.SpotNumber</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">@((spot.IsOccupied) ? "Occupied" : "Available")</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">@((spot.ParkedVehicle?.RegistrationNumber != null) ? spot.ParkedVehicle.RegistrationNumber : "None")</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">@spot.Location</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                @if (!spot.IsOccupied)
-                                {
-                                    <form asp-action="DecreaseParkingSpots" asp-controller="Admin" method="post">
-                                        <input type="hidden" name="id" value="@spot.Id" />
-                                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Remove</button>
-                                    </form>
-                                }
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="4" class="border border-gray-300 px-4 py-2 text-center">No parking spots available.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div class="flex flex-wrap justify-center space-x-4 mb-8">
+            <!-- Manage Parking Spots Button -->
+            <a href="/Admin/ManageParkingSpots" class="bg-indigo-700 text-white px-6 py-3 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                Manage Parking Spots
+            </a>
 
-        <div class="mt-4 flex justify-center">
-            <form method="post" asp-action="IncreaseParkingSpots" asp-controller="Admin">
-                <button class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Add Parking Spot</button>
-            </form>
+            <!-- Manage Parked Vehicles Button -->
+            <a href="/Admin/ManageParkedVehicles" class="bg-indigo-700 text-white px-6 py-3 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                Manage Parked Vehicles
+            </a>
         </div>
-
-        <h2 class="text-2xl font-bold mb-4">Manage Parked Vehicles</h2>
-        <!-- Search Form -->
-        <form method="get" asp-action="ParkingSpots" class="mb-4">
-            <input type="text"
-                   name="searchTerm"
-                   value="@ViewData["searchTerm"]"
-                   class="border border-gray-300 px-4 py-2 rounded"
-                   placeholder="Search by registration, vehicle type, color, make, or model" />
-            <button type="submit" class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Search</button>
-        </form>
-
-        <!-- Table displaying parked vehicles -->
-        <table class="table-auto w-full border-collapse border border-gray-300">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="border border-gray-300 px-4 py-2">Registration Number</th>
-                    <th class="border border-gray-300 px-4 py-2">Vehicle Type</th>
-                    <th class="border border-gray-300 px-4 py-2">Color</th>
-                    <th class="border border-gray-300 px-4 py-2">Make & Model</th>
-                    <th class="border border-gray-300 px-4 py-2">Parked Spot</th>
-                    <th class="border border-gray-300 px-4 py-2">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.ParkedVehicles != null && Model.ParkedVehicles.Any())
-                {
-                    @foreach (var vehicle in Model.ParkedVehicles)
-                    {
-                        <tr class="hover:bg-gray-100">
-                            <td class="border border-gray-300 px-4 py-2">@vehicle.RegistrationNumber</td>
-                            <td class="border border-gray-300 px-4 py-2">@((vehicle.VehicleType != null) ? vehicle.VehicleType.Name : "Unknown")</td>
-                            <td class="border border-gray-300 px-4 py-2"><span style="background-color: @vehicle.Color;padding: 0.2rem 0.4rem; ">@vehicle.Color</span></td>
-                            <td class="border border-gray-300 px-4 py-2">@($"{vehicle.Make} {vehicle.Model}")</td>
-                            <td class="border border-gray-300 px-4 py-2">@((vehicle.ParkingSpot?.SpotNumber != null) ? vehicle.ParkingSpot.SpotNumber : "Not Assigned")</td>
-                            <td class="border border-gray-300 px-4 py-2">
-                                <div class="flex space-x-2">
-                                    <!-- Edit Button -->
-                                    <a asp-action="Edit" asp-route-id="@vehicle.Id" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600" aria-disabled="false">Edit</a>
-
-                                    <!-- Checkout Button -->
-                                    <a asp-action="CheckOut" asp-route-id="@vehicle.Id" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-600" aria-disabled="false">Checkout</a>
-
-                                    <!-- Details Button -->
-                                    <a asp-action="Details" asp-route-id="@vehicle.Id" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600" aria-disabled="false">Details</a>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="6" class="border border-gray-300 px-4 py-2 text-center">No vehicles parked.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
     </div>
 </div>

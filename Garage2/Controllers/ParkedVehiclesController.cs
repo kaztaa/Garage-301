@@ -24,8 +24,9 @@ namespace Garage301.Controllers
             _context = context;
             _userManager = userManager;
         }
-        [Authorize]
+
         // GET: ParkedVehicles
+        [Authorize]
         public async Task<IActionResult> Index(string searchField, int type, string sortBy, string currentFilter, int currentType)
         {
             if(User.IsInRole("Admin"))
@@ -216,6 +217,7 @@ namespace Garage301.Controllers
         }
 
         // GET: ParkedVehicles/CheckIn
+        [Authorize]
         public async Task<IActionResult> CheckIn()
         {
             var viewModel = new ParkedVehicleCheckInViewModel();
@@ -229,6 +231,7 @@ namespace Garage301.Controllers
         // POST: ParkedVehicles/CheckIn
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> CheckIn(ParkedVehicleCheckInViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -324,6 +327,7 @@ namespace Garage301.Controllers
 
 
         // GET: ParkedVehicles/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -339,6 +343,17 @@ namespace Garage301.Controllers
             if (parkedVehicle == null)
             {
                 return NotFound();
+            }
+
+            // Get the current logged-in user's ID and compare to vehicle's owner
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
+            var isAdmin = User.IsInRole("Admin");
+
+            // If the vehicle's owner is not matched with current ID and current user is not admin
+            // then do not allow edit
+            if (parkedVehicle.ApplicationUserId != currentUserId && !isAdmin)
+            {
+                return Forbid();
             }
 
             var viewModel = new EditParkedVehicleViewModel
@@ -363,6 +378,7 @@ namespace Garage301.Controllers
         // POST: ParkedVehicles/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, EditParkedVehicleViewModel viewModel)
         {
             if (id != viewModel.Id)
@@ -381,6 +397,17 @@ namespace Garage301.Controllers
                     if (existingVehicle == null)
                     {
                         return NotFound();
+                    }
+
+                    // Get the current logged-in user's ID and compare to vehicle's owner
+                    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
+                    var isAdmin = User.IsInRole("Admin"); 
+
+                    // If the vehicle's owner is not matched with current ID and current user is not admin
+                    // then do not allow edit
+                    if (existingVehicle.ApplicationUserId != currentUserId && !isAdmin)
+                    {
+                        return Forbid(); // Prevent unauthorized edits
                     }
 
                     // Check if the registration number already exists in the database (excluding the current vehicle)

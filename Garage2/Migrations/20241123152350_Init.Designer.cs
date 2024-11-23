@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage301.Migrations
 {
     [DbContext(typeof(Garage301Context))]
-    [Migration("20241123125812_Init")]
+    [Migration("20241123152350_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -106,7 +106,7 @@ namespace Garage301.Migrations
                         {
                             Id = "user1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "106c963a-4433-4a51-9ca0-cd64c241e8bf",
+                            ConcurrencyStamp = "6d755da1-9bc5-4bfa-bc40-1ae33ceb3181",
                             Email = "user1@example.com",
                             EmailConfirmed = false,
                             FirstName = "user1",
@@ -114,14 +114,14 @@ namespace Garage301.Migrations
                             LockoutEnabled = false,
                             Personnummer = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "82df6a31-db87-4647-9cad-6f451e45a458",
+                            SecurityStamp = "dc47ea2a-48a5-40c1-a62e-2782f65df236",
                             TwoFactorEnabled = false
                         },
                         new
                         {
                             Id = "user2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c79f0098-2e7b-49d7-8489-b20386bb6449",
+                            ConcurrencyStamp = "fbc7cfe7-9698-4ef1-86f5-2eebe8134240",
                             Email = "user2@example.com",
                             EmailConfirmed = false,
                             FirstName = "user2",
@@ -129,7 +129,7 @@ namespace Garage301.Migrations
                             LockoutEnabled = false,
                             Personnummer = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "afb7e9a5-4be1-41cd-b25c-d1702ef342b2",
+                            SecurityStamp = "2f0fa52c-2a33-43c4-b2fd-20e58483c3f8",
                             TwoFactorEnabled = false
                         });
                 });
@@ -192,7 +192,7 @@ namespace Garage301.Migrations
                         {
                             Id = 1,
                             ApplicationUserId = "user1",
-                            ArrivalTime = new DateTime(2024, 11, 23, 11, 58, 11, 404, DateTimeKind.Local).AddTicks(7404),
+                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4542),
                             Color = "Blue",
                             Make = "Toyota",
                             Model = "Corolla",
@@ -205,7 +205,7 @@ namespace Garage301.Migrations
                         {
                             Id = 2,
                             ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 23, 11, 58, 11, 404, DateTimeKind.Local).AddTicks(7411),
+                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4550),
                             Color = "Green",
                             Make = "Hyundai",
                             Model = "i3",
@@ -218,7 +218,7 @@ namespace Garage301.Migrations
                         {
                             Id = 3,
                             ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 23, 11, 58, 11, 404, DateTimeKind.Local).AddTicks(7415),
+                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4554),
                             Color = "Black",
                             Make = "BMW",
                             Model = "M3",
@@ -231,7 +231,7 @@ namespace Garage301.Migrations
                         {
                             Id = 4,
                             ApplicationUserId = "user1",
-                            ArrivalTime = new DateTime(2024, 11, 23, 11, 58, 11, 404, DateTimeKind.Local).AddTicks(7418),
+                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4557),
                             Color = "Red",
                             Make = "Honda",
                             Model = "Goldwing",
@@ -244,7 +244,7 @@ namespace Garage301.Migrations
                         {
                             Id = 5,
                             ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 23, 11, 58, 11, 404, DateTimeKind.Local).AddTicks(7423),
+                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4561),
                             Color = "Green",
                             Make = "Yamaha",
                             Model = "R1",

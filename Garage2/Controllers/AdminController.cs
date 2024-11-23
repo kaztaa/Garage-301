@@ -16,26 +16,54 @@ namespace Garage301.Controllers
             _context = context;
         }
 
-        [Authorize(Roles = "Admin")]
-        public IActionResult ManageParkingSpots(string searchTerm)
+        public IActionResult ManageParkingSpots()
         {
-            // Fetch parking spots from the database (use your data access logic here)
-            var parkingSpots = _context.ParkingSpot.Include(ps => ps.ParkedVehicle).ToList();
+            // Fetch the parking spots from the database
+            var parkingSpots = _context.ParkingSpot
+                .Include(p => p.ParkedVehicle) // Include related data if needed
+                .OrderBy(p => p.SpotNumber)
+                .ToList(); // Ensure it's a list
 
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                // Perform case-insensitive search by spot number or location
-                parkingSpots = parkingSpots.Where(ps =>
-                    ps.SpotNumber.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    ps.Location.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
-                ).ToList();
-            }
-
-            // Set the search term to the ViewData to retain the value in the search field
-            ViewData["searchTerm"] = searchTerm;
-
+            // Pass the collection directly to the view
             return View(parkingSpots);
         }
+
+
+        public IActionResult ManageParkedVehicles()
+        {
+            // Fetch parked vehicles from the database
+            var parkedVehicles = _context.ParkedVehicle
+                .Include(v => v.VehicleType) // Include related VehicleType if necessary
+                .Include(v => v.ParkingSpot) // Include related ParkingSpot if necessary
+                .OrderBy(v => v.Id)
+                .ToList(); // Convert to a list
+
+            // Pass the collection to the view
+            return View(parkedVehicles);
+        }
+
+
+
+        //[Authorize(Roles = "Admin")]
+        //public IActionResult ManageParkingSpots(string searchTerm)
+        //{
+        //    // Fetch parking spots from the database (use your data access logic here)
+        //    var parkingSpots = _context.ParkingSpot.Include(ps => ps.ParkedVehicle).ToList();
+
+        //    if (!string.IsNullOrEmpty(searchTerm))
+        //    {
+        //        // Perform case-insensitive search by spot number or location
+        //        parkingSpots = parkingSpots.Where(ps =>
+        //            ps.SpotNumber.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+        //            ps.Location.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+        //        ).ToList();
+        //    }
+
+        //    // Set the search term to the ViewData to retain the value in the search field
+        //    ViewData["searchTerm"] = searchTerm;
+
+        //    return View(parkingSpots);
+        //}
 
 
         [Authorize(Roles = "Admin")]
@@ -109,7 +137,7 @@ namespace Garage301.Controllers
             _context.ParkingSpot.Add(newSpot);
             _context.SaveChanges();
 
-            return RedirectToAction("ParkingSpots");
+            return RedirectToAction("ManageParkingSpots");
         }
 
 
@@ -129,7 +157,7 @@ namespace Garage301.Controllers
             }
 
             // Redirect back to the ParkingSpots view
-            return RedirectToAction("ParkingSpots");
+            return RedirectToAction("ManageParkingSpots");
         }
 
         // GET: Admin/Details/5
