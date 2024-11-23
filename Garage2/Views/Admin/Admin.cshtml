@@ -85,7 +85,7 @@
                         <tr class="hover:bg-gray-100">
                             <td class="border border-gray-300 px-4 py-2">@vehicle.RegistrationNumber</td>
                             <td class="border border-gray-300 px-4 py-2">@((vehicle.VehicleType != null) ? vehicle.VehicleType.Name : "Unknown")</td>
-                            <td class="border border-gray-300 px-4 py-2">@vehicle.Color</td>
+                            <td class="border border-gray-300 px-4 py-2"><span style="background-color: @vehicle.Color;padding: 0.2rem 0.4rem; ">@vehicle.Color</span></td>
                             <td class="border border-gray-300 px-4 py-2">@($"{vehicle.Make} {vehicle.Model}")</td>
                             <td class="border border-gray-300 px-4 py-2">@((vehicle.ParkingSpot?.SpotNumber != null) ? vehicle.ParkingSpot.SpotNumber : "Not Assigned")</td>
                             <td class="border border-gray-300 px-4 py-2">
