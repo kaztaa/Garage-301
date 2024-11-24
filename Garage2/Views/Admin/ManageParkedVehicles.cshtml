@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Garage301.Models.ParkedVehicle>
+
+@{
+    ViewData["Title"] = "Manage Parked Vehicles";
+    var sortDirection = ViewData["SortDirection"] as string ?? "asc";
+    var sortBy = ViewData["SortBy"] as string ?? "RegistrationNumber";
+}
+
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-5xl bg-white p-8 shadow-md rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">@ViewData["Title"]</h2>
+
+        <!-- Search Form -->
+        <form method="get" asp-action="ManageParkedVehicles" class="mb-4">
+            <input type="text"
+                   name="searchTerm"
+                   value="@ViewData["searchTerm"]"
+                   class="border border-gray-300 px-4 py-2 rounded"
+                   placeholder="Search by registration, vehicle type, color, make, or model" />
+            <button type="submit" class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Search</button>
+        </form>
+
+        <!-- Vehicle Table -->
+        <table class="table-auto w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2 text-center">
+                        <a href="@Url.Action("ManageParkedVehicles", new { sortBy = "RegistrationNumber", sortDirection = sortDirection == "asc" ? "desc" : "asc", searchTerm = ViewData["searchTerm"] })">
+                            Registration Number
+                        </a>
+                    </th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">
+                        <a href="@Url.Action("ManageParkedVehicles", new { sortBy = "VehicleType", sortDirection = sortDirection == "asc" ? "desc" : "asc", searchTerm = ViewData["searchTerm"] })">
+                            Vehicle Type
+                        </a>
+                    </th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">
+                        <a href="@Url.Action("ManageParkedVehicles", new { sortBy = "Color", sortDirection = sortDirection == "asc" ? "desc" : "asc", searchTerm = ViewData["searchTerm"] })">
+                            Color
+                        </a>
+                    </th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">
+                        <a href="@Url.Action("ManageParkedVehicles", new { sortBy = "MakeModel", sortDirection = sortDirection == "asc" ? "desc" : "asc", searchTerm = ViewData["searchTerm"] })">
+                            Make & Model
+                        </a>
+                    </th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">
+                        <a href="@Url.Action("ManageParkedVehicles", new { sortBy = "ParkingSpot", sortDirection = sortDirection == "asc" ? "desc" : "asc", searchTerm = ViewData["searchTerm"] })">
+                            Parked Spot
+                        </a>
+                    </th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var parkedVehicle in Model)
+                {
+                    <tr class="@(parkedVehicle.ParkingSpot != null ? "bg-red-500 text-white" : "bg-green-500 text-white")">
+                        <td class="border border-gray-300 px-4 py-2 text-center">@parkedVehicle.RegistrationNumber</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            @(!string.IsNullOrWhiteSpace(parkedVehicle.VehicleType?.Name)
+                                ? parkedVehicle.VehicleType.Name
+                                : "Unknown")
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            <span style="background-color: @parkedVehicle.Color; padding: 0.2rem 0.4rem;">@parkedVehicle.Color</span>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            @(string.IsNullOrWhiteSpace(parkedVehicle.Make) && string.IsNullOrWhiteSpace(parkedVehicle.Model)
+                                ? "Unknown"
+                                : $"{parkedVehicle.Make} {parkedVehicle.Model}")
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            @(parkedVehicle.ParkingSpot?.SpotNumber.ToString() ?? "Not Assigned")
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            <div class="flex space-x-2 justify-center">
+                                <a asp-action="Edit" asp-route-id="@parkedVehicle.Id" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
+                                <a asp-action="CheckOut" asp-route-id="@parkedVehicle.Id" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-600">Checkout</a>
+                                <a asp-action="Details" asp-route-id="@parkedVehicle.Id" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 w-full inline-block">Details</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

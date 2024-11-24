@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage301.Migrations
 {
     [DbContext(typeof(Garage301Context))]
-    [Migration("20241121134739_Init")]
+    [Migration("20241123152350_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -69,6 +69,10 @@ namespace Garage301.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Personnummer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -96,6 +100,38 @@ namespace Garage301.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "user1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "6d755da1-9bc5-4bfa-bc40-1ae33ceb3181",
+                            Email = "user1@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "user1",
+                            LastName = "Ehds",
+                            LockoutEnabled = false,
+                            Personnummer = "",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "dc47ea2a-48a5-40c1-a62e-2782f65df236",
+                            TwoFactorEnabled = false
+                        },
+                        new
+                        {
+                            Id = "user2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "fbc7cfe7-9698-4ef1-86f5-2eebe8134240",
+                            Email = "user2@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "user2",
+                            LastName = "Ehdsafd",
+                            LockoutEnabled = false,
+                            Personnummer = "",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "2f0fa52c-2a33-43c4-b2fd-20e58483c3f8",
+                            TwoFactorEnabled = false
+                        });
                 });
 
             modelBuilder.Entity("Garage301.Models.ParkedVehicle", b =>
@@ -107,6 +143,7 @@ namespace Garage301.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ArrivalTime")
@@ -154,55 +191,65 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 1,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2689),
+                            ApplicationUserId = "user1",
+                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4542),
                             Color = "Blue",
                             Make = "Toyota",
                             Model = "Corolla",
                             NumberOfWheels = 4,
+                            ParkingSpotId = 1,
                             RegistrationNumber = "ABC123",
                             VehicleTypesId = 1
                         },
                         new
                         {
                             Id = 2,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2695),
+                            ApplicationUserId = "user2",
+                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4550),
                             Color = "Green",
                             Make = "Hyundai",
                             Model = "i3",
                             NumberOfWheels = 4,
+                            ParkingSpotId = 2,
                             RegistrationNumber = "ERT234",
                             VehicleTypesId = 1
                         },
                         new
                         {
                             Id = 3,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2699),
+                            ApplicationUserId = "user2",
+                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4554),
                             Color = "Black",
                             Make = "BMW",
                             Model = "M3",
                             NumberOfWheels = 4,
+                            ParkingSpotId = 3,
                             RegistrationNumber = "ERR134",
                             VehicleTypesId = 1
                         },
                         new
                         {
                             Id = 4,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2702),
+                            ApplicationUserId = "user1",
+                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4557),
                             Color = "Red",
                             Make = "Honda",
                             Model = "Goldwing",
                             NumberOfWheels = 2,
+                            ParkingSpotId = 4,
                             RegistrationNumber = "HFF577",
                             VehicleTypesId = 2
                         },
                         new
                         {
                             Id = 5,
-                            ArrivalTime = new DateTime(2024, 11, 21, 12, 47, 38, 608, DateTimeKind.Local).AddTicks(2706),
+                            ApplicationUserId = "user2",
+                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4561),
                             Color = "Green",
                             Make = "Yamaha",
                             Model = "R1",
                             NumberOfWheels = 2,
+                            ParkingSpotId = 5,
                             RegistrationNumber = "OOP123",
                             VehicleTypesId = 2
                         });
@@ -241,73 +288,90 @@ namespace Garage301.Migrations
                         new
                         {
                             Id = 1,
-                            IsOccupied = false,
+                            IsOccupied = true,
+                            Location = "Location 1",
+                            ParkedVehicleId = 1,
                             SpotNumber = 1
                         },
                         new
                         {
                             Id = 2,
-                            IsOccupied = false,
+                            IsOccupied = true,
+                            Location = "Location 2",
+                            ParkedVehicleId = 2,
                             SpotNumber = 2
                         },
                         new
                         {
                             Id = 3,
-                            IsOccupied = false,
+                            IsOccupied = true,
+                            Location = "Location 3",
+                            ParkedVehicleId = 3,
                             SpotNumber = 3
                         },
                         new
                         {
                             Id = 4,
-                            IsOccupied = false,
+                            IsOccupied = true,
+                            Location = "Location 4",
+                            ParkedVehicleId = 4,
                             SpotNumber = 4
                         },
                         new
                         {
                             Id = 5,
-                            IsOccupied = false,
+                            IsOccupied = true,
+                            Location = "Location 5",
+                            ParkedVehicleId = 5,
                             SpotNumber = 5
                         },
                         new
                         {
                             Id = 6,
                             IsOccupied = false,
+                            Location = "Location 6",
                             SpotNumber = 6
                         },
                         new
                         {
                             Id = 7,
                             IsOccupied = false,
+                            Location = "Location 7",
                             SpotNumber = 7
                         },
                         new
                         {
                             Id = 8,
                             IsOccupied = false,
+                            Location = "Location 8",
                             SpotNumber = 8
                         },
                         new
                         {
                             Id = 9,
                             IsOccupied = false,
+                            Location = "Location 9",
                             SpotNumber = 9
                         },
                         new
                         {
                             Id = 10,
                             IsOccupied = false,
+                            Location = "Location 10",
                             SpotNumber = 10
                         },
                         new
                         {
                             Id = 11,
                             IsOccupied = false,
+                            Location = "Location 11",
                             SpotNumber = 11
                         },
                         new
                         {
                             Id = 12,
                             IsOccupied = false,
+                            Location = "Location 12",
                             SpotNumber = 12
                         });
                 });
@@ -501,15 +565,19 @@ namespace Garage301.Migrations
 
             modelBuilder.Entity("Garage301.Models.ParkedVehicle", b =>
                 {
-                    b.HasOne("Garage301.Models.ApplicationUser", null)
+                    b.HasOne("Garage301.Models.ApplicationUser", "User")
                         .WithMany("Vehicles")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Garage301.Models.VehicleTypes", "VehicleType")
                         .WithMany("ParkedVehicles")
                         .HasForeignKey("VehicleTypesId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("User");
 
                     b.Navigation("VehicleType");
                 });

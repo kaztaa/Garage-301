@@ -12,8 +12,12 @@
 
     <dl class="gap-y-4 grid grid-cols-1 text-center">
         <div class="gap-4 flex items-center justify-between">
+            <dt class="text-gray-700 font-medium"> Owned by </dt>
+            <dd> @Html.DisplayFor(model => model.User.FullName) </dd>
+        </div>
+        <div class="gap-4 flex items-center justify-between">
             <dt class="text-gray-700 font-medium"> @Html.DisplayNameFor(model => model.VehicleType) </dt>
-            <dd> @Html.DisplayFor(model => model.VehicleType) </dd>
+            <dd> @Html.DisplayFor(model => model.VehicleType.Name) </dd>
         </div>
 
         <div class="gap-4 flex items-center justify-between">

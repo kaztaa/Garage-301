@@ -38,6 +38,32 @@ namespace Garage301.Data
                 .WithOne(ps => ps.ParkedVehicle)
                 .HasForeignKey<ParkingSpot>(ps => ps.ParkedVehicleId);
 
+            //Configure the one - to - many relationship between ApplicationUser and ParkedVehicle
+            modelBuilder.Entity<ParkedVehicle>()
+                .HasOne(pv => pv.User)               // Each ParkedVehicle belongs to one ApplicationUser
+                .WithMany(u => u.Vehicles)           // Each ApplicationUser can have many ParkedVehicles
+                .HasForeignKey(pv => pv.ApplicationUserId); // Foreign Key
+
+            // One ParkedVehicle is associated with one ParkingSpot (optional)
+            modelBuilder.Entity<ParkedVehicle>()
+                .HasOne(pv => pv.ParkingSpot)        // Each ParkedVehicle can have one ParkingSpot
+                .WithOne(ps => ps.ParkedVehicle)     // Each ParkingSpot can have one ParkedVehicle
+                .HasForeignKey<ParkedVehicle>(pv => pv.ParkingSpotId) // Foreign key
+                .IsRequired(false); // It's optional for ParkedVehicle to have a ParkingSpot
+
+            // One ParkingSpot can be assigned to at most one ParkedVehicle
+            modelBuilder.Entity<ParkingSpot>()
+                .HasOne(ps => ps.ParkedVehicle)      // One ParkingSpot can have one ParkedVehicle
+                .WithOne(pv => pv.ParkingSpot)       // One ParkedVehicle has one ParkingSpot
+                .HasForeignKey<ParkingSpot>(ps => ps.ParkedVehicleId) // Foreign key
+                .IsRequired(false); // It's optional for a ParkingSpot to be occupied
+
+            //// Configure uniqueness for Personnummer
+            //modelBuilder.Entity<ApplicationUser>()
+            //    .HasIndex(u => u.Personnummer)
+            //    .IsUnique()
+            //    .HasDatabaseName("Garage301Context");
+
             // Seed data for VehicleTypes
             modelBuilder.Entity<VehicleTypes>().HasData(
                 new VehicleTypes { Id = 1, Name = "Car" },
@@ -48,13 +74,11 @@ namespace Garage301.Data
                 new VehicleTypes { Id = 6, Name = "Bicycle" }
             );
 
-            // Seed data for ParkedVehicle with only foreign keys specified
-            modelBuilder.Entity<ParkedVehicle>().HasData(
-                new ParkedVehicle { Id = 1, VehicleTypesId = 1, RegistrationNumber = "ABC123", Color = "Blue", Make = "Toyota", Model = "Corolla", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2) },
-                new ParkedVehicle { Id = 2, VehicleTypesId = 1, RegistrationNumber = "ERT234", Color = "Green", Make = "Hyundai", Model = "i3", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2) },
-                new ParkedVehicle { Id = 3, VehicleTypesId = 1, RegistrationNumber = "ERR134", Color = "Black", Make = "BMW", Model = "M3", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2) },
-                new ParkedVehicle { Id = 4, VehicleTypesId = 2, RegistrationNumber = "HFF577", Color = "Red", Make = "Honda", Model = "Goldwing", NumberOfWheels = 2, ArrivalTime = DateTime.Now.AddHours(-2) },
-                new ParkedVehicle { Id = 5, VehicleTypesId = 2, RegistrationNumber = "OOP123", Color = "Green", Make = "Yamaha", Model = "R1", NumberOfWheels = 2, ArrivalTime = DateTime.Now.AddHours(-2) }
+
+            //// Seed data for ApplicationUsers
+            modelBuilder.Entity<ApplicationUser>().HasData(
+                new ApplicationUser { Id = "user1", FirstName = "user1", LastName = "Ehds", Email = "user1@example.com" },
+                new ApplicationUser { Id = "user2", FirstName = "user2", LastName = "Ehdsafd", Email = "user2@example.com" }
             );
 
             // Seed data for ParkingSpot
@@ -64,9 +88,21 @@ namespace Garage301.Data
                 {
                     Id = i,
                     SpotNumber = i,
-                    IsOccupied = false
+                    IsOccupied = i <= 5, // Assuming first 5 spots are occupied by vehicles (change as needed)
+                    Location = $"Location {i}",
+                    ParkedVehicleId = i <= 5 ? i : (int?)null // Assign ParkedVehicleId for first 5 spots, else null
                 });
             }
+
+            // Seed data for ParkedVehicle with ParkingSpot assignments
+            modelBuilder.Entity<ParkedVehicle>().HasData(
+                new ParkedVehicle { Id = 1, VehicleTypesId = 1, RegistrationNumber = "ABC123", Color = "Blue", Make = "Toyota", Model = "Corolla", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user1", ParkingSpotId = 1 },
+                new ParkedVehicle { Id = 2, VehicleTypesId = 1, RegistrationNumber = "ERT234", Color = "Green", Make = "Hyundai", Model = "i3", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user2", ParkingSpotId = 2 },
+                new ParkedVehicle { Id = 3, VehicleTypesId = 1, RegistrationNumber = "ERR134", Color = "Black", Make = "BMW", Model = "M3", NumberOfWheels = 4, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user2", ParkingSpotId = 3 },
+                new ParkedVehicle { Id = 4, VehicleTypesId = 2, RegistrationNumber = "HFF577", Color = "Red", Make = "Honda", Model = "Goldwing", NumberOfWheels = 2, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user1", ParkingSpotId = 4 },
+                new ParkedVehicle { Id = 5, VehicleTypesId = 2, RegistrationNumber = "OOP123", Color = "Green", Make = "Yamaha", Model = "R1", NumberOfWheels = 2, ArrivalTime = DateTime.Now.AddHours(-2), ApplicationUserId = "user2", ParkingSpotId = 5 }
+            );
+
         }
     }
 }

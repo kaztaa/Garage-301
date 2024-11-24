@@ -46,7 +46,9 @@ namespace Garage301
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            app.MapControllerRoute(
+                name: "admin",
+                pattern: "{controller=Admin}/{action=ParkingSpots}/{id?}");
             app.Run();
         }
     }
