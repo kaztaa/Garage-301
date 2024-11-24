@@ -149,13 +149,67 @@ namespace Garage301.Controllers
             return View(parkedVehicle);
         }
 
+        // GET: ParkedVehicles/Members
+        [Authorize(Roles = "Member")]
+        [HttpGet]
+        [Route("ParkedVehicles/Members")]
+        public async Task<IActionResult> Members()
+        {
+            // Load users along with their vehicles (if any)
+            var users = await _context.Users
+                .Include(u => u.Vehicles)  // Eager load the Vehicles collection for each user
+                .ToListAsync();
+
+            // Set the vehicle count for each user and total vehicle count
+            var model = new MemberDisplayViewModel
+            {
+                Users = users,
+                VehicleCount = users.Sum(u => u.Vehicles.Count()) // Sum of vehicle counts for all users
+            };
+
+            return View(model);
+        }
+
+
+
+        // GET: ParkedVehicles/Members/{id}
+        [Authorize(Roles = "Member")]
+        [HttpGet]
+        [Route("ParkedVehicles/Members/{id}")]
+        public async Task<IActionResult> Members(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.Users
+                .Include(u => u.Vehicles) // Eager load Vehicles
+                .ThenInclude(u => u.VehicleType)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var model = new MemberDetailsViewModel
+            {
+                User = user,
+                Vehicles = user.Vehicles
+            };
+
+            return View("MembersDetails", model); // Use a detailed view for individual users
+        }
+
+
         // GET: ParkedVehicles/CheckIn
         [Authorize]
         public async Task<IActionResult> CheckIn()
         {
             var viewModel = new ParkedVehicleCheckInViewModel();
             ViewData["VehicleTypes"] = new SelectList(await _context.VehicleTypes.ToListAsync(), "Id", "Name");
-            ViewData["ParkingSpots"] = new SelectList(await _context.ParkingSpot.Where(s => !s.IsOccupied).ToListAsync(), "Id", "SpotNumber");
+            ViewData["ParkingSpots"] = new SelectList(await _context.ParkingSpot.OrderBy(s => s.SpotNumber).Where(s => !s.IsOccupied).ToListAsync(), "Id", "SpotNumber");
 
             return View(viewModel);
         }
