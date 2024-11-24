@@ -1,0 +1,43 @@
+﻿@model MemberDisplayViewModel
+
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-4xl bg-white p-8 shadow-lg rounded-lg">
+        <h2 class="text-2xl font-bold text-center mb-6">Members</h2>
+        <p class="text-lg text-center mb-6">Total Vehicles: @Model.VehicleCount</p> <!-- Display total vehicle count -->
+
+        <table class="table-auto w-full border-collapse border border-gray-300 rounded-lg overflow-hidden">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="border border-gray-300 px-4 py-2 text-left">Email</th>
+                    <th class="border border-gray-300 px-4 py-2 text-left">Username</th>
+                    <th class="border border-gray-300 px-4 py-2 text-left">Full name</th>
+                    <th class="border border-gray-300 px-4 py-2 text-left">Number of Vehicles</th> <!-- New column -->
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Users != null && Model.Users.Any())
+                {
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr class="odd:bg-gray-100 even:bg-white hover:bg-indigo-50 cursor-pointer"
+                            onclick="window.location.href='@Url.Action("Members", "ParkedVehicles", new { id = user.Id })'">
+                            <td class="border border-gray-300 px-4 py-2">@user.Email</td>
+                            <td class="border border-gray-300 px-4 py-2">@user.UserName</td>
+                            <td class="border border-gray-300 px-4 py-2">@user.FullName</td>
+                            <td class="border border-gray-300 px-4 py-2">@user.Vehicles.Count()</td> <!-- Display vehicle count for each user -->
+                        </tr>
+                    }
+                }
+
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center border border-gray-300 px-4 py-4 text-gray-500">
+                            No members found.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

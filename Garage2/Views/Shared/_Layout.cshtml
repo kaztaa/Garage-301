@@ -57,29 +57,29 @@
         @if(User.IsInRole("Member") || User.IsInRole("Admin"))
         {
             <aside class="w-64 bg-gray-200 p-4 shadow-md">
-                <h2 class="mb-4 text-lg font-bold">Navigation</h2>
+                <h2 class="text-lg font-bold mb-4">Navigation</h2>
                 <ul class="space-y-4">
                     @if (User.IsInRole("Admin"))
                     {
-                        <li><a class="block rounded p-2 hover:bg-gray-300" href="/Admin/ManageParkingSpots">Manage Parking Spots</a></li>
-                        <li><a class="block rounded p-2 hover:bg-gray-300" href="/Admin/ManageParkedVehicles">Manage Parked Vehicles</a></li>
-                        <li><a class="block rounded p-2 hover:bg-gray-300" asp-controller="ParkedVehicles" asp-action="Stats">Stats</a></li>
-
+                        <li><a class="block p-2 rounded hover:bg-gray-300" href="/Admin/ManageParkingSpots">Manage Parking Spots</a></li>
+                        <li><a class="block p-2 rounded hover:bg-gray-300" href="/Admin/ManageParkedVehicles">Manage Parked Vehicles</a></li>
                     }
 
                     @if(User.IsInRole("Member"))
                     {      
-                        <li><a class="block rounded p-2 hover:bg-gray-300" asp-controller="ParkedVehicles" asp-action="Index">Parked Vehicles</a></li>
+                        <li><a class="block p-2 rounded hover:bg-gray-300" asp-controller="ParkedVehicles" asp-action="Index">My Parked Vehicles</a></li>
+                        <li><a class="block p-2 rounded hover:bg-gray-300" asp-controller="ParkedVehicles" asp-action="Members">All members</a></li>
                     }
 
-                    <li><a class="block rounded p-2 hover:bg-gray-300" asp-controller="ParkedVehicles" asp-action="CheckIn">Park a vehicle</a></li>
-                    <li><a class="block rounded p-2 hover:bg-gray-300" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                    <li><a class="block p-2 rounded hover:bg-gray-300" asp-controller="ParkedVehicles" asp-action="CheckIn">Park a vehicle</a></li>
+                    <li><a class="block p-2 rounded hover:bg-gray-300" asp-controller="ParkedVehicles" asp-action="Stats">Stats</a></li>
+                    <li><a class="block p-2 rounded hover:bg-gray-300" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
                 </ul>
             </aside>
         }
 
         <!-- Main Content -->
-        <main role="main" class="flex-grow bg-white p-6">
+        <main role="main" class="flex-grow p-6 bg-white">
             @RenderBody()
         </main>
     </div>
