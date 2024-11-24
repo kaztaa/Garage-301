@@ -18,32 +18,38 @@ namespace Garage301.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult ManageParkingSpots(string sortBy = "SpotNumber", string sortDirection = "asc")
+        public async Task<IActionResult> ManageParkingSpots(string searchTerm, string sortBy = "SpotNumber", string sortDirection = "asc")
         {
-            // Set default sorting values
-            var sortOrder = sortDirection.ToLower() == "desc" ? "desc" : "asc";
-
             // Fetch the parking spots from the database
             var parkingSpots = _context.ParkingSpot
-                .Include(p => p.ParkedVehicle) // Include related data (ParkedVehicle) if needed
-                .AsQueryable(); // Ensure we have a queryable object
+                .Include(p => p.ParkedVehicle)
+                .AsQueryable();
 
-            // Apply sorting based on the column name
+            // Apply filtering based on searchTerm
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                parkingSpots = parkingSpots.Where(p =>
+                    p.SpotNumber.ToString().Contains(searchTerm) ||
+                    p.Location.Contains(searchTerm) ||
+                    (p.ParkedVehicle != null && p.ParkedVehicle.RegistrationNumber.Contains(searchTerm))
+                );
+            }
+
+            // Apply sorting logic (existing logic remains the same)
             switch (sortBy)
             {
                 case "SpotNumber":
-                    parkingSpots = sortOrder == "asc"
+                    parkingSpots = sortDirection == "asc"
                         ? parkingSpots.OrderBy(p => p.SpotNumber)
                         : parkingSpots.OrderByDescending(p => p.SpotNumber);
                     break;
                 case "Status":
-                    // Sort so that occupied spots (IsOccupied == true) come first
-                    parkingSpots = sortOrder == "asc"
-                        ? parkingSpots.OrderBy(p => p.IsOccupied ? 0 : 1) // true (occupied) = 0, false (not occupied) = 1
+                    parkingSpots = sortDirection == "asc"
+                        ? parkingSpots.OrderBy(p => p.IsOccupied ? 0 : 1)
                         : parkingSpots.OrderByDescending(p => p.IsOccupied ? 0 : 1);
                     break;
-                case "RegistrationNumber":
-                    parkingSpots = sortOrder == "asc"
+                case "Registration Number":
+                    parkingSpots = sortDirection == "asc"
                         ? parkingSpots.OrderBy(p => p.ParkedVehicle.RegistrationNumber)
                         : parkingSpots.OrderByDescending(p => p.ParkedVehicle.RegistrationNumber);
                     break;
@@ -52,21 +58,25 @@ namespace Garage301.Controllers
                     break;
             }
 
-            // Pass the sorted collection to the view
-            ViewData["SortDirection"] = sortOrder;
+            // Pass data to the view
+            var parkingSpotList = await parkingSpots.ToListAsync();
+            ViewData["searchTerm"] = searchTerm;
+            ViewData["SortDirection"] = sortDirection;
             ViewData["SortBy"] = sortBy;
 
-            return View(parkingSpots.ToList());
+            return View(parkingSpotList);
         }
 
 
 
-        public IActionResult ManageParkedVehicles(string searchTerm, string sortBy = "RegistrationNumber", string sortDirection = "asc")
+
+
+        public async Task<IActionResult> ManageParkedVehicles(string searchTerm, string sortBy = "RegistrationNumber", string sortDirection = "asc")
         {
             // Apply filtering based on search term
             var vehicles = _context.ParkedVehicle
-                .Include(v => v.VehicleType)        // Eager load VehicleType
-                .Include(v => v.ParkingSpot)        // Eager load ParkingSpot
+                .Include(v => v.VehicleType) // Eager load VehicleType
+                .Include(v => v.ParkingSpot) // Eager load ParkingSpot
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchTerm))
@@ -79,31 +89,33 @@ namespace Garage301.Controllers
             }
 
             // Apply sorting logic
-            switch (sortBy)
+            vehicles = sortBy switch
             {
-                case "RegistrationNumber":
-                    vehicles = sortDirection == "asc" ? vehicles.OrderBy(v => v.RegistrationNumber) : vehicles.OrderByDescending(v => v.RegistrationNumber);
-                    break;
-                case "VehicleType":
-                    vehicles = sortDirection == "asc" ? vehicles.OrderBy(v => v.VehicleType.Name) : vehicles.OrderByDescending(v => v.VehicleType.Name);
-                    break;
-                case "Color":
-                    vehicles = sortDirection == "asc" ? vehicles.OrderBy(v => v.Color) : vehicles.OrderByDescending(v => v.Color);
-                    break;
-                case "MakeModel":
-                    vehicles = sortDirection == "asc" ? vehicles.OrderBy(v => v.Make + " " + v.Model) : vehicles.OrderByDescending(v => v.Make + " " + v.Model);
-                    break;
-                case "ParkingSpot":
-                    vehicles = sortDirection == "asc" ? vehicles.OrderBy(v => v.ParkingSpot.SpotNumber) : vehicles.OrderByDescending(v => v.ParkingSpot.SpotNumber);
-                    break;
-                default:
-                    vehicles = vehicles.OrderBy(v => v.RegistrationNumber); // Default sort
-                    break;
-            }
+                "RegistrationNumber" => sortDirection == "asc"
+                    ? vehicles.OrderBy(v => v.RegistrationNumber)
+                    : vehicles.OrderByDescending(v => v.RegistrationNumber),
+                "VehicleType" => sortDirection == "asc"
+                    ? vehicles.OrderBy(v => v.VehicleType.Name)
+                    : vehicles.OrderByDescending(v => v.VehicleType.Name),
+                "Color" => sortDirection == "asc"
+                    ? vehicles.OrderBy(v => v.Color)
+                    : vehicles.OrderByDescending(v => v.Color),
+                "MakeModel" => sortDirection == "asc"
+                    ? vehicles.OrderBy(v => v.Make + " " + v.Model)
+                    : vehicles.OrderByDescending(v => v.Make + " " + v.Model),
+                "ParkingSpot" => sortDirection == "asc"
+                    ? vehicles.OrderBy(v => v.ParkingSpot.SpotNumber)
+                    : vehicles.OrderByDescending(v => v.ParkingSpot.SpotNumber),
+                _ => vehicles.OrderBy(v => v.RegistrationNumber) // Default sort
+            };
+
+            // Fetch the filtered and sorted data asynchronously
+            var vehicleList = await vehicles.ToListAsync();
 
             // Return the correct model type (IEnumerable<ParkedVehicle>)
-            return View(vehicles.ToList());
+            return View(vehicleList);
         }
+
 
 
 
