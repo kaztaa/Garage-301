@@ -8,7 +8,7 @@
     <h1 class="mb-6 text-center text-3xl font-bold">@ViewData["Title"]</h1>
 
     <div class="space-y-6">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="space-y-4">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="space-y-4" novalidate>
             <div asp-validation-summary="ModelOnly" class="text-center text-red-500" role="alert"></div>
 
             <div class="flex flex-col gap-y-2">
@@ -37,7 +37,7 @@
 
             <div class="flex flex-col gap-y-2">
                 <label asp-for="Input.Personnummer" class="font-medium text-gray-700"></label>
-                <input asp-for="Input.Personnummer" class="w-full rounded-md border p-2" placeholder="YYMMDDXXXX" />
+                <input asp-for="Input.Personnummer" class="w-full rounded-md border p-2" placeholder="YYMMDD-XXXX" />
                 <span asp-validation-for="Input.Personnummer" class="mb-1 text-sm text-red-500"></span>
             </div>
 
@@ -60,4 +60,90 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("#registerForm");
+
+            form.addEventListener("submit", function (event) {
+                const firstName = document.querySelector("[name='Input.FirstName']").value.trim();
+                const lastName = document.querySelector("[name='Input.LastName']").value.trim();
+                const personnummer = document.querySelector("[name='Input.Personnummer']").value.trim();
+                let isValid = true;
+
+                // Custom validation for first name and last name
+                const firstNameValidation = document.querySelector("[data-valmsg-for='Input.FirstName']");
+                if (firstName.toLowerCase() === lastName.toLowerCase()) {
+                    firstNameValidation.textContent = "First name cannot be the same as last name.";
+                    isValid = false;
+                } else {
+                    firstNameValidation.textContent = "";
+                }
+
+                // Custom validation for personnummer format (YYMMDD-XXXX)
+                const personnummerValidation = document.querySelector("[data-valmsg-for='Input.Personnummer']");
+                const personnummerRegex = /^\d{6}-\d{4}$/;
+                if (!personnummerRegex.test(personnummer)) {
+                    personnummerValidation.textContent = "Personnummer must be in the format YYMMDD-XXXX.";
+                    isValid = false;
+                } else {
+                    personnummerValidation.textContent = "";
+
+                    // Custom validation to ensure age is at least 18
+                    const birthDateString = personnummer.substring(0, 6);
+                    const birthYear = parseInt(birthDateString.substring(0, 2), 10);
+                    const birthMonth = parseInt(birthDateString.substring(2, 4), 10);
+                    const birthDay = parseInt(birthDateString.substring(4, 6), 10);
+
+                    // Determine full birth year
+                    const currentYear = new Date().getFullYear();
+                    const fullBirthYear = birthYear + (birthYear > parseInt(String(currentYear).substring(2)) ? 1900 : 2000);
+
+                    const birthDate = new Date(fullBirthYear, birthMonth - 1, birthDay);
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+
+                    if (age < 18) {
+                        personnummerValidation.textContent = "You must be at least 18 years old to register.";
+                        isValid = false;
+                    }
+                }
+
+            });
+
+            // Real-time validation feedback for input fields
+            form.addEventListener("input", function (event) {
+                const inputElement = event.target;
+                const validationMessageElement = inputElement.nextElementSibling;
+
+                // Provide real-time feedback for first name and last name being the same
+                if (inputElement.name === 'Input.FirstName' || inputElement.name === 'Input.LastName') {
+                    const firstName = document.querySelector("[name='Input.FirstName']").value.trim();
+                    const lastName = document.querySelector("[name='Input.LastName']").value.trim();
+                    const firstNameValidation = document.querySelector("[data-valmsg-for='Input.FirstName']");
+                    if (firstName.toLowerCase() === lastName.toLowerCase()) {
+                        firstNameValidation.textContent = "First name cannot be the same as last name.";
+                    } else {
+                        firstNameValidation.textContent = "";
+                    }
+                }
+
+                // Provide real-time feedback for personnummer
+                if (inputElement.name === 'Input.Personnummer') {
+                    const personnummer = inputElement.value.trim();
+                    const personnummerValidation = document.querySelector("[data-valmsg-for='Input.Personnummer']");
+                    const personnummerRegex = /^\d{6}-\d{4}$/;
+                    if (!personnummerRegex.test(personnummer)) {
+                        personnummerValidation.textContent = "Personnummer must be in the format YYMMDD-XXXX.";
+                    } else {
+                        personnummerValidation.textContent = "";
+                    }
+                }
+            });
+        });
+    </script>
 }
