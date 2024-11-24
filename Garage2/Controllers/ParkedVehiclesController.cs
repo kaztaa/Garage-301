@@ -481,6 +481,7 @@ namespace Garage301.Controllers
             return _context.ParkedVehicle.Any(e => e.Id == id);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Stats()
         {
             decimal pricePerHour = 10;

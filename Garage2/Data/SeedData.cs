@@ -1,6 +1,7 @@
 ﻿using Garage301.Data;
 using Garage301.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gym.Data
 {
@@ -33,6 +34,7 @@ namespace Gym.Data
 
             await AddRolesAsync(roleNames);
 
+            // Create admin and user accounts
             var admin = await AddAccountAsync(adminEmail, adminFirstname, adminLastname, adminPersonnummer, pwd);
             var user = await AddAccountAsync(userEmail, userFirstname, userLastname, userPersonnummer, pwd);
 
@@ -52,7 +54,10 @@ namespace Gym.Data
             if (!await userManager.IsInRoleAsync(user, roleName))
             {
                 var result = await userManager.AddToRoleAsync(user, roleName);
-                if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
+                if (!result.Succeeded)
+                {
+                    throw new Exception(string.Join("\n", result.Errors));
+                }
             }
         }
 
@@ -60,7 +65,15 @@ namespace Gym.Data
         {
             var found = await userManager.FindByNameAsync(accountEmail);
 
-            if (found != null) return null;
+            // If the user already exists, return it
+            if (found != null) return found;
+
+            // Check if another user has the same personnummer (unique constraint)
+            var personnummerExists = await userManager.Users.AnyAsync(u => u.Personnummer == personnummer);
+            if (personnummerExists)
+            {
+                throw new Exception($"User with Personnummer {personnummer} already exists.");
+            }
 
             var user = new ApplicationUser
             {
@@ -69,12 +82,15 @@ namespace Gym.Data
                 FirstName = firstName,
                 LastName = lastName,
                 Personnummer = personnummer,
-                EmailConfirmed = true
+                EmailConfirmed = true // Bypass email confirmation for seeded accounts
             };
 
             var result = await userManager.CreateAsync(user, pwd);
 
-            if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
+            if (!result.Succeeded)
+            {
+                throw new Exception(string.Join("\n", result.Errors));
+            }
 
             return user;
         }
@@ -88,7 +104,10 @@ namespace Gym.Data
                 var role = new IdentityRole { Name = roleName };
                 var result = await roleManager.CreateAsync(role);
 
-                if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
+                if (!result.Succeeded)
+                {
+                    throw new Exception(string.Join("\n", result.Errors));
+                }
             }
         }
     }

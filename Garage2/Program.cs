@@ -14,7 +14,7 @@ namespace Garage301
             builder.Services.AddDbContext<Garage301Context>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Garage301Context") ?? throw new InvalidOperationException("Connection string 'Garage301Context' not found.")));
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<Garage301Context>();
 

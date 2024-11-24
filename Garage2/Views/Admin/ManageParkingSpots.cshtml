@@ -4,21 +4,21 @@
     ViewData["Title"] = "Manage Parking Spots";
 }
 
-<div class="flex items-center justify-center min-h-screen bg-gray-100">
-    <div class="w-full max-w-5xl bg-white p-8 shadow-md rounded-lg">
-        <h2 class="text-2xl font-bold mb-4">@ViewData["Title"]</h2>
+<div class="flex min-h-screen items-center justify-center bg-gray-100">
+    <div class="w-full max-w-5xl rounded-lg bg-white p-8 shadow-md">
+        <h2 class="mb-4 text-2xl font-bold">@ViewData["Title"]</h2>
 
         <!-- Add Search Form if needed -->
         <form method="get" asp-action="ParkingSpots" class="mb-4">
             <input type="text"
                    name="searchTerm"
                    value="@ViewData["searchTerm"]"
-                   class="border border-gray-300 px-4 py-2 rounded"
+                   class="rounded border border-gray-300 px-4 py-2"
                    placeholder="Search by Spot Number, Location, or Vehicle Registration" />
             <button type="submit" class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Search</button>
         </form>
 
-        <table class="table-auto w-full border-collapse border border-gray-300">
+        <table class="w-full table-auto border-collapse border border-gray-300">
             <thead>
                 <tr class="bg-gray-200">
                     <th class="border border-gray-300 px-4 py-2 text-center">
@@ -36,9 +36,7 @@
                             Registration Number
                         </a>
                     </th>
-                    <th class="border border-gray-300 px-4 py-2 text-center">
-                        Location
-                    </th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">Location</th>
                     <th class="border border-gray-300 px-4 py-2 text-center">Actions</th>
                 </tr>
             </thead>
@@ -49,19 +47,21 @@
                     <tr class="@(spot.IsOccupied ? "bg-red-500 text-white" : "bg-green-500 text-white")">
                         <td class="border border-gray-300 px-4 py-2 text-center">@spot.SpotNumber</td>
                         <td class="border border-gray-300 px-4 py-2 text-center">@((spot.IsOccupied) ? "Occupied" : "Available")</td>
-                        <td class="border border-gray-300 px-4 py-2 text-center">@((spot.ParkedVehicle?.RegistrationNumber != null) ? spot.ParkedVehicle.RegistrationNumber : "None")</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            @(spot.ParkedVehicle != null ? spot.ParkedVehicle.RegistrationNumber : "None")
+                        </td>
                         <td class="border border-gray-300 px-4 py-2 text-center">@spot.Location</td>
                         <td class="border border-gray-300 px-4 py-2 text-center">
                             @if (!spot.IsOccupied)
                             {
                                 <form asp-action="DecreaseParkingSpots" asp-controller="Admin" method="post">
                                     <input type="hidden" name="id" value="@spot.Id" />
-                                    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 w-full">Remove</button>
+                                    <button type="submit" class="w-full rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700">Remove</button>
                                 </form>
                             }
-                            else
+                            else if (spot.ParkedVehicle != null)
                             {
-                                <a asp-action="Details" asp-route-id="@spot.ParkedVehicle.Id" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 w-full inline-block">Details</a>
+                                <a asp-action="Details" asp-route-id="@spot.ParkedVehicle.Id" class="inline-block w-full rounded bg-yellow-500 px-4 py-2 text-white hover:bg-yellow-600">Details</a>
                             }
                         </td>
                     </tr>
@@ -70,7 +70,7 @@
         </table>
 
         <!-- Add Parking Spot Form -->
-        <div class="mt-4 mb-6 flex justify-center">
+        <div class="mb-6 mt-4 flex justify-center">
             <form method="post" asp-action="IncreaseParkingSpots" asp-controller="Admin">
                 <button class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Add Parking Spot</button>
             </form>
