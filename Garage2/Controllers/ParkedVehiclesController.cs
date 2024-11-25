@@ -333,7 +333,7 @@ namespace Garage301.Controllers
             }
 
             // Get the current logged-in user's ID and compare to vehicle's owner
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
+            var currentUserId = _userManager.GetUserId(User);
             var isAdmin = User.IsInRole("Admin");
 
             // If the vehicle's owner is not matched with current ID and current user is not admin
