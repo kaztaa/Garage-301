@@ -4,20 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Garage301</title>
-     @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
     <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
-    
-
     <link rel="stylesheet" href="~/Garage301.styles.css" asp-append-version="true" />
 </head>
-<body class="flex min-h-screen flex-col bg-gray-100" >
+<body class="flex min-h-screen flex-col bg-gray-100">
 
     <!-- Navbar -->
     <header>
         <nav class="bg-gray-800 text-white shadow-md">
-            <div class="container mx-auto flex items-center justify-around px-4 py-4">
+            <div class="container mx-auto flex items-center justify-center px-4 py-4">
                 <!-- Logo -->
                 <a class="text-2xl font-bold tracking-wide hover:text-red-500" asp-controller="Home" asp-action="Index">
                     DAJS Garage
@@ -31,35 +27,63 @@
                               d="M4 6h16M4 12h16m-7 6h7" />
                     </svg>
                 </button>
-                <!-- Navbar Links (Hidden on mobile, shown on md and larger) -->
-                <div id="navbar-links" class="hidden space-x-6 md:flex">
+                <!-- Navbar Links -->
+@*                 <div id="navbar-links" class="hidden space-x-6 md:flex">
                     <a class="nav-link text-dark hover:text-red-500" asp-controller="Home" asp-action="Index">Home</a>
-                    <a class="nav-link text-dark hover:text-red-500" asp-controller="ParkedVehicles" asp-action="Index">Parked Vehicles</a>
+                    @if (!User.IsInRole("Admin"))
+                    {
+                        <a class="nav-link text-dark hover:text-red-500" asp-controller="ParkedVehicles" asp-action="Index">Parked Vehicles</a>
+                    }
                     <a class="nav-link text-dark hover:text-red-500" asp-controller="ParkedVehicles" asp-action="Stats">Stats</a>
-
                     @if (User.IsInRole("Admin"))
                     {
-                        <a class="nav-link text-dark hover:text-red-500" asp-area="" asp-controller="Admin">Admin</a>
+                        <a href="/Admin" class="nav-link text-dark hover:text-red-500">Admin</a>
                     }
-
                     <a class="nav-link text-dark hover:text-red-500" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </div>
+                </div> *@
             </div>
             <!-- Mobile Menu Links -->
-            <div id="mobile-navbar-links" class="flex hidden flex-col space-y-2 px-4 pb-2 md:hidden">
+@*             <div id="mobile-navbar-links" class="flex hidden flex-col space-y-2 px-4 pb-2 md:hidden">
                 <a class="nav-link text-dark hover:text-red-500" asp-controller="Home" asp-action="Index">Home</a>
                 <a class="nav-link text-dark hover:text-red-500" asp-controller="ParkedVehicles" asp-action="Index">Parked Vehicles</a>
                 <a class="nav-link text-dark hover:text-red-500" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
+            </div> *@
         </nav>
     </header>
 
-    <div class="">
-        <main role="main" class="">
+    <!-- Main Content Layout -->
+    <div class="flex flex-grow">
+        <!-- Sidebar Navigation -->
+        @if(User.IsInRole("Member") || User.IsInRole("Admin"))
+        {
+            <aside class="w-64 bg-gray-200 p-4 shadow-md">
+                <h2 class="mb-4 text-lg font-bold">Navigation</h2>
+                <ul class="space-y-4">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li><a class="block rounded p-2 hover:bg-gray-300" href="/Admin/ManageParkingSpots">Manage Parking Spots</a></li>
+                        <li><a class="block rounded p-2 hover:bg-gray-300" href="/Admin/ManageParkedVehicles">Manage Parked Vehicles</a></li>
+                        <li><a class="block rounded p-2 hover:bg-gray-300" asp-controller="ParkedVehicles" asp-action="Stats">Stats</a></li>
+
+                    }
+
+                    @if(User.IsInRole("Member"))
+                    {      
+                        <li><a class="block rounded p-2 hover:bg-gray-300" asp-controller="ParkedVehicles" asp-action="Index">My Parked Vehicles</a></li>
+                        <li><a class="block rounded p-2 hover:bg-gray-300" asp-controller="ParkedVehicles" asp-action="Members">All members</a></li>
+                    }
+
+                    <li><a class="block rounded p-2 hover:bg-gray-300" asp-controller="ParkedVehicles" asp-action="CheckIn">Park a vehicle</a></li>
+                    <li><a class="block rounded p-2 hover:bg-gray-300" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                </ul>
+            </aside>
+        }
+
+        <!-- Main Content -->
+        <main role="main" class="flex-grow bg-white p-6">
             @RenderBody()
         </main>
     </div>
-
 
     <!-- Footer -->
     <footer class="mt-auto w-full bg-gray-900 py-4 text-center text-white">
@@ -67,6 +91,7 @@
             &copy; 2024 DAJS Garage
         </div>
     </footer>
+
     <script>
         // JavaScript to toggle the mobile menu
         document.getElementById("mobile-menu-btn").addEventListener("click", function () {
@@ -81,31 +106,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
-
-
-
-@*     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 bg-white">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Garage301</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse d-sm-inline-flex justify-content-between collapse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ParkedVehicles" asp-action="Index">Overview</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ParkedVehicles" asp-action="Stats">Stats</a>
-                        </li>                       
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header> *@

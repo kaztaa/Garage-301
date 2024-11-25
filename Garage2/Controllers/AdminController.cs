@@ -4,6 +4,7 @@ using Garage301.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace Garage301.Controllers
 {
@@ -17,17 +18,156 @@ namespace Garage301.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult ParkingSpots()
+        public async Task<IActionResult> ManageParkingSpots(string searchTerm, string sortBy = "SpotNumber", string sortDirection = "asc")
         {
-            // Fetching parking spots and sorting them by SpotNumber
+            // Fetch the parking spots from the database
             var parkingSpots = _context.ParkingSpot
-                .OrderBy(p => p.SpotNumber) // Sort by SpotNumber in ascending order
-                .ToList();
+                .Include(p => p.ParkedVehicle)
+                .AsQueryable();
 
-            // Fetching parked vehicles with their associated VehicleType
-            var parkedVehicles = _context.ParkedVehicle
+            // Apply filtering based on searchTerm
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                parkingSpots = parkingSpots.Where(p =>
+                    p.SpotNumber.ToString().Contains(searchTerm) ||
+                    p.Location.Contains(searchTerm) ||
+                    (p.ParkedVehicle != null && p.ParkedVehicle.RegistrationNumber.Contains(searchTerm))
+                );
+            }
+
+            // Apply sorting logic (existing logic remains the same)
+            switch (sortBy)
+            {
+                case "SpotNumber":
+                    parkingSpots = sortDirection == "asc"
+                        ? parkingSpots.OrderBy(p => p.SpotNumber)
+                        : parkingSpots.OrderByDescending(p => p.SpotNumber);
+                    break;
+                case "Status":
+                    parkingSpots = sortDirection == "asc"
+                        ? parkingSpots.OrderBy(p => p.IsOccupied ? 0 : 1)
+                        : parkingSpots.OrderByDescending(p => p.IsOccupied ? 0 : 1);
+                    break;
+                case "Registration Number":
+                    parkingSpots = sortDirection == "asc"
+                        ? parkingSpots.OrderBy(p => p.ParkedVehicle.RegistrationNumber)
+                        : parkingSpots.OrderByDescending(p => p.ParkedVehicle.RegistrationNumber);
+                    break;
+                default:
+                    parkingSpots = parkingSpots.OrderBy(p => p.SpotNumber);
+                    break;
+            }
+
+            // Pass data to the view
+            var parkingSpotList = await parkingSpots.ToListAsync();
+            ViewData["searchTerm"] = searchTerm;
+            ViewData["SortDirection"] = sortDirection;
+            ViewData["SortBy"] = sortBy;
+
+            return View(parkingSpotList);
+        }
+
+
+
+
+
+        public async Task<IActionResult> ManageParkedVehicles(string searchTerm, string sortBy = "RegistrationNumber", string sortDirection = "asc")
+        {
+            // Apply filtering based on search term
+            var vehicles = _context.ParkedVehicle
+                .Include(v => v.VehicleType) // Eager load VehicleType
+                .Include(v => v.ParkingSpot) // Eager load ParkingSpot
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                vehicles = vehicles.Where(v =>
+                    v.RegistrationNumber.Contains(searchTerm) ||
+                    v.VehicleType.Name.Contains(searchTerm) ||
+                    v.Color.Contains(searchTerm) ||
+                    (v.Make + " " + v.Model).Contains(searchTerm));
+            }
+
+            // Apply sorting logic
+            vehicles = sortBy switch
+            {
+                "RegistrationNumber" => sortDirection == "asc"
+                    ? vehicles.OrderBy(v => v.RegistrationNumber)
+                    : vehicles.OrderByDescending(v => v.RegistrationNumber),
+                "VehicleType" => sortDirection == "asc"
+                    ? vehicles.OrderBy(v => v.VehicleType.Name)
+                    : vehicles.OrderByDescending(v => v.VehicleType.Name),
+                "Color" => sortDirection == "asc"
+                    ? vehicles.OrderBy(v => v.Color)
+                    : vehicles.OrderByDescending(v => v.Color),
+                "MakeModel" => sortDirection == "asc"
+                    ? vehicles.OrderBy(v => v.Make + " " + v.Model)
+                    : vehicles.OrderByDescending(v => v.Make + " " + v.Model),
+                "ParkingSpot" => sortDirection == "asc"
+                    ? vehicles.OrderBy(v => v.ParkingSpot.SpotNumber)
+                    : vehicles.OrderByDescending(v => v.ParkingSpot.SpotNumber),
+                _ => vehicles.OrderBy(v => v.RegistrationNumber) // Default sort
+            };
+
+            // Fetch the filtered and sorted data asynchronously
+            var vehicleList = await vehicles.ToListAsync();
+
+            // Return the correct model type (IEnumerable<ParkedVehicle>)
+            return View(vehicleList);
+        }
+
+
+
+
+
+        //[Authorize(Roles = "Admin")]
+        //public IActionResult ManageParkingSpots(string searchTerm)
+        //{
+        //    // Fetch parking spots from the database (use your data access logic here)
+        //    var parkingSpots = _context.ParkingSpot.Include(ps => ps.ParkedVehicle).ToList();
+
+        //    if (!string.IsNullOrEmpty(searchTerm))
+        //    {
+        //        // Perform case-insensitive search by spot number or location
+        //        parkingSpots = parkingSpots.Where(ps =>
+        //            ps.SpotNumber.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+        //            ps.Location.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+        //        ).ToList();
+        //    }
+
+        //    // Set the search term to the ViewData to retain the value in the search field
+        //    ViewData["searchTerm"] = searchTerm;
+
+        //    return View(parkingSpots);
+        //}
+
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ParkingSpots(string searchTerm)
+        {
+            // Fetching parking spots and sorting them by SpotNumber asynchronously
+            var parkingSpots = await _context.ParkingSpot
+                .OrderBy(p => p.SpotNumber) // Sort by SpotNumber in ascending order
+                .ToListAsync();
+
+            // Fetching parked vehicles with their associated VehicleType asynchronously
+            var parkedVehiclesQuery = _context.ParkedVehicle
                 .Include(v => v.VehicleType)  // Ensure VehicleType is loaded
-                .ToList();
+                .AsQueryable();
+
+            // If search term is provided, filter the results
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                parkedVehiclesQuery = parkedVehiclesQuery.Where(v =>
+                    v.RegistrationNumber.Contains(searchTerm) ||
+                    v.VehicleType.Name.Contains(searchTerm) ||
+                    v.Color.Contains(searchTerm) ||
+                    (v.Make + " " + v.Model).Contains(searchTerm)
+                );
+            }
+
+            // Execute the query and fetch the results asynchronously
+            var parkedVehicles = await parkedVehiclesQuery.ToListAsync();
 
             // Create and populate the view model
             var viewModel = new AdminViewModel
@@ -39,6 +179,7 @@ namespace Garage301.Controllers
             // Return the view with the populated model
             return View("Admin", viewModel);
         }
+
 
 
 
@@ -65,14 +206,14 @@ namespace Garage301.Controllers
             {
                 SpotNumber = nextAvailableSpotNumber,
                 IsOccupied = false,
-                Location = $"Section {nextAvailableSpotNumber}"
+                Location = $"Location {nextAvailableSpotNumber}"
             };
 
             // Add the new spot to the database and save changes
             _context.ParkingSpot.Add(newSpot);
             _context.SaveChanges();
 
-            return RedirectToAction("ParkingSpots");
+            return RedirectToAction("ManageParkingSpots");
         }
 
 
@@ -92,7 +233,7 @@ namespace Garage301.Controllers
             }
 
             // Redirect back to the ParkingSpots view
-            return RedirectToAction("ParkingSpots");
+            return RedirectToAction("ManageParkingSpots");
         }
 
         // GET: Admin/Details/5

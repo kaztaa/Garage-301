@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -20,6 +21,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Garage301.Areas.Identity.Pages.Account
 {
@@ -56,35 +58,35 @@ namespace Garage301.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-
-            [Required]
+            [Required(ErrorMessage = "User Name is required.")]
             [Display(Name = "User Name")]
             public string UserName { get; set; }
 
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Email is required.")]
+            [EmailAddress(ErrorMessage = "Invalid Email Address.")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "First name is required.")]
             [Display(Name = "First name")]
             public string FirstName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Last name is required.")]
             [Display(Name = "Last name")]
             public string LastName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Personnummer is required.")]
             [RegularExpression(@"^\d{6}-\d{4}$", ErrorMessage = "Personnummer must be in the format YYMMDD-XXXX.")]
             [Display(Name = "Personnummer")]
             public string Personnummer { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Password is required.")]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
+            [Required(ErrorMessage = "Confirmation password is required.")]
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
@@ -102,92 +104,94 @@ namespace Garage301.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Validate Personnummer format and age
-                if (!DateTime.TryParseExact(Input.Personnummer.Substring(0, 6), "yyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime birthDate))
-                {
-                    ModelState.AddModelError("Personnummer", "Invalid birthdate in personnummer.");
-                    return Page();
-                }
+                // If the ModelState is not valid, redisplay the form and show the validation errors.
+                return Page();
+            }
 
-                var age = DateTime.Today.Year - birthDate.Year;
-                if (birthDate.Date > DateTime.Today.AddYears(-age)) age--;
+            // Validate Personnummer format and age
+            if (!DateTime.TryParseExact(Input.Personnummer.Substring(0, 6), "yyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime birthDate))
+            {
+                ModelState.AddModelError("Input.Personnummer", "Invalid birthdate in personnummer.");
+                return Page();
+            }
 
-                if (age < 18)
-                {
-                    ModelState.AddModelError("Personnummer", "You must be at least 18 years old to register.");
-                    return Page();
-                }
+            var age = DateTime.Today.Year - birthDate.Year;
+            if (birthDate.Date > DateTime.Today.AddYears(-age)) age--;
 
-                // Validate that the first name is not the same as the last name
-                if (Input.FirstName.Equals(Input.LastName, StringComparison.OrdinalIgnoreCase))
-                {
-                    ModelState.AddModelError("", "First name cannot be the same as last name.");
-                    return Page();
-                }
+            if (age < 18)
+            {
+                ModelState.AddModelError("Input.Personnummer", "You must be at least 18 years old to register.");
+                return Page();
+            }
 
-                // Check if Personnummer is unique
-                var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Personnummer == Input.Personnummer);
-                if (existingUser != null)
-                {
-                    ModelState.AddModelError("Personnummer", "This personnummer is already registered.");
-                    return Page();
-                }
+            // Validate that the first name is not the same as the last name
+            if (Input.FirstName.Equals(Input.LastName, StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("Input.FirstName", "First name cannot be the same as last name.");
+                return Page();
+            }
 
-                // Create a new user and set the properties
-                var user = CreateUser();
-                user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName;
-                user.Personnummer = Input.Personnummer;
-                user.UserName = Input.UserName;
+            // Check if Personnummer is unique
+            var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Personnummer == Input.Personnummer);
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("Input.Personnummer", "This personnummer is already registered.");
+                return Page();
+            }
 
-                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+            // Create a new user and set the properties
+            var user = CreateUser();
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+            user.Personnummer = Input.Personnummer;
+            user.UserName = Input.UserName;
 
-                // Create the user with the provided password
-                var result = await _userManager.CreateAsync(user, Input.Password);
+            await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
+            await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+            // Create the user with the provided password
+            var result = await _userManager.CreateAsync(user, Input.Password);
+            if (result.Succeeded)
+            {
                 await _userManager.AddToRoleAsync(user, "Member");
+                await _userManager.AddClaimAsync(user, new Claim("FullName", $"{user.FirstName} {user.LastName}"));
 
-                if (result.Succeeded)
+                _logger.LogInformation("User created a new account with password.");
+
+                var userId = await _userManager.GetUserIdAsync(user);
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Page(
+                    "/Account/ConfirmEmail",
+                    pageHandler: null,
+                    values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                    protocol: Request.Scheme);
+
+                await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                if (_userManager.Options.SignIn.RequireConfirmedAccount)
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                 }
-
-                // Add any errors that occurred during user creation
-                foreach (var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
                 }
+            }
+
+            // Add any errors that occurred during user creation
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
             }
 
             // If we got this far, something failed, redisplay form
             return Page();
         }
-
-
 
         private ApplicationUser CreateUser()
         {
@@ -213,3 +217,4 @@ namespace Garage301.Areas.Identity.Pages.Account
         }
     }
 }
+
