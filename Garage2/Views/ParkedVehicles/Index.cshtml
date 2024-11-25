@@ -9,11 +9,11 @@
 }
 
 <div class="mt-10 flex flex-col items-center justify-center px-4">
-    <h1 class="mb-8 text-4xl font-bold">Parked Vehicles</h1>
+    <h1 class="mb-8 text-4xl font-bold">My Parked Vehicles</h1>
 
-    <p class="mb-4">
+@*     <p class="mb-4">
         <a href="@Url.Action("CheckIn")" class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Park a vehicle</a>
-    </p>
+    </p> *@
 
     <form asp-action="Index" class="w-full max-w-lg">
         <div class="flex flex-col space-y-3 md:space-y-0 md:flex-row md:space-x-3">
@@ -30,9 +30,9 @@
             <button class="rounded bg-gray-700 px-4 py-2 text-white hover:bg-gray-600" type="submit" asp-route-currentFilter="@currentFilter" asp-route-currentType="@currentType">Search</button>
         </div>
     </form>
-    <div class="mt-12">
+@*     <div class="mt-12">
         <a asp-action="Index" class="rounded bg-indigo-700 px-4 py-2 text-white hover:bg-indigo-600">Back to Full List</a>
-    </div>
+    </div> *@
 
     <table class="mt-6 w-full max-w-4xl rounded-lg border border-gray-200 bg-white shadow-md">
         <thead>
@@ -62,18 +62,28 @@
         <tbody>
             @foreach (var item in vehicles)
             {
-                <tr class="hover:bg-gray-100">
-                    <td class="border-b p-3">@Html.DisplayFor(modelItem => item.VehicleType.Name)</td>
-                    <td class="border-b p-3">@Html.DisplayFor(modelItem => item.RegistrationNumber)</td>
-                    <td class="border-b p-3">@Html.DisplayFor(modelItem => item.ArrivalTime)</td>
-                    <td class="border-b p-3">@Html.DisplayFor(modelItem => item.ParkedDuration)</td>
-                    <td class="border-b p-3">
-                        <div class="flex space-x-2 w-full">
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-indigo-600" aria-disabled="false">Edit</a>
-                            <a asp-action="CheckOut" asp-route-id="@item.Id" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-600" aria-disabled="false">Checkout</a>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600" aria-disabled="false">Details</a>
-                        </div>
-                    </td>
+                @if (item != null)
+                {
+                    <tr class="hover:bg-gray-100">
+                        <td class="border-b p-3">@Html.DisplayFor(modelItem => item.VehicleType.Name)</td>
+                        <td class="border-b p-3">@Html.DisplayFor(modelItem => item.RegistrationNumber)</td>
+                        <td class="border-b p-3">@Html.DisplayFor(modelItem => item.ArrivalTime)</td>
+                        <td class="border-b p-3">@Html.DisplayFor(modelItem => item.ParkedDuration)</td>
+                        <td class="border-b p-3">
+                            <div class="flex space-x-2 w-full">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-indigo-600" aria-disabled="false">Edit</a>
+                                <a asp-action="CheckOut" asp-route-id="@item.Id" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-600" aria-disabled="false">Checkout</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600" aria-disabled="false">Details</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+
+            @if (!vehicles.Any())
+            {
+                <tr>
+                    <td colspan="5" class="border-b p-3 text-center">No vehicle(s)</td>
                 </tr>
             }
         </tbody>
