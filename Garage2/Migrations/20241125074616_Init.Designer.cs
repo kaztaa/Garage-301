@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage301.Migrations
 {
     [DbContext(typeof(Garage301Context))]
-    [Migration("20241123152350_Init")]
+    [Migration("20241125074616_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -106,31 +106,33 @@ namespace Garage301.Migrations
                         {
                             Id = "user1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6d755da1-9bc5-4bfa-bc40-1ae33ceb3181",
+                            ConcurrencyStamp = "4ccfd3c7-71c6-4dd9-8bd2-08467dc5648b",
                             Email = "user1@example.com",
                             EmailConfirmed = false,
                             FirstName = "user1",
-                            LastName = "Ehds",
+                            LastName = "Usersson1",
                             LockoutEnabled = false,
                             Personnummer = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "dc47ea2a-48a5-40c1-a62e-2782f65df236",
-                            TwoFactorEnabled = false
+                            SecurityStamp = "cc95ae38-361a-46a3-83dd-f17a43184ad4",
+                            TwoFactorEnabled = false,
+                            UserName = "UserName1"
                         },
                         new
                         {
                             Id = "user2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fbc7cfe7-9698-4ef1-86f5-2eebe8134240",
+                            ConcurrencyStamp = "0d9cc229-e5f0-438b-b293-5a77e8ecaa86",
                             Email = "user2@example.com",
                             EmailConfirmed = false,
                             FirstName = "user2",
-                            LastName = "Ehdsafd",
+                            LastName = "Usersson2",
                             LockoutEnabled = false,
                             Personnummer = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2f0fa52c-2a33-43c4-b2fd-20e58483c3f8",
-                            TwoFactorEnabled = false
+                            SecurityStamp = "0d243819-0319-42c1-97c1-477d627f5ef0",
+                            TwoFactorEnabled = false,
+                            UserName = "UserName2"
                         });
                 });
 
@@ -192,8 +194,8 @@ namespace Garage301.Migrations
                         {
                             Id = 1,
                             ApplicationUserId = "user1",
-                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4542),
-                            Color = "Blue",
+                            ArrivalTime = new DateTime(2024, 11, 25, 6, 46, 15, 997, DateTimeKind.Local).AddTicks(3132),
+                            Color = "#0000FF",
                             Make = "Toyota",
                             Model = "Corolla",
                             NumberOfWheels = 4,
@@ -205,8 +207,8 @@ namespace Garage301.Migrations
                         {
                             Id = 2,
                             ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4550),
-                            Color = "Green",
+                            ArrivalTime = new DateTime(2024, 11, 25, 6, 46, 15, 997, DateTimeKind.Local).AddTicks(3138),
+                            Color = "#008000",
                             Make = "Hyundai",
                             Model = "i3",
                             NumberOfWheels = 4,
@@ -218,8 +220,8 @@ namespace Garage301.Migrations
                         {
                             Id = 3,
                             ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4554),
-                            Color = "Black",
+                            ArrivalTime = new DateTime(2024, 11, 25, 6, 46, 15, 997, DateTimeKind.Local).AddTicks(3142),
+                            Color = "#000000",
                             Make = "BMW",
                             Model = "M3",
                             NumberOfWheels = 4,
@@ -231,8 +233,8 @@ namespace Garage301.Migrations
                         {
                             Id = 4,
                             ApplicationUserId = "user1",
-                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4557),
-                            Color = "Red",
+                            ArrivalTime = new DateTime(2024, 11, 25, 6, 46, 15, 997, DateTimeKind.Local).AddTicks(3146),
+                            Color = "#FF0000",
                             Make = "Honda",
                             Model = "Goldwing",
                             NumberOfWheels = 2,
@@ -244,8 +246,8 @@ namespace Garage301.Migrations
                         {
                             Id = 5,
                             ApplicationUserId = "user2",
-                            ArrivalTime = new DateTime(2024, 11, 23, 14, 23, 50, 75, DateTimeKind.Local).AddTicks(4561),
-                            Color = "Green",
+                            ArrivalTime = new DateTime(2024, 11, 25, 6, 46, 15, 997, DateTimeKind.Local).AddTicks(3150),
+                            Color = "#008000",
                             Make = "Yamaha",
                             Model = "R1",
                             NumberOfWheels = 2,

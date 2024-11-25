@@ -10,6 +10,7 @@
                     <th class="border border-gray-300 px-4 py-2 text-left">Make</th>
                     <th class="border border-gray-300 px-4 py-2 text-left">Model</th>
                     <th class="border border-gray-300 px-4 py-2 text-left">Vehicle type</th>
+                    <th class="border border-gray-300 px-4 py-2 text-left">Parking cost</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,6 +23,7 @@
                             <td class="border border-gray-300 px-4 py-2">@vehicle.Make</td>
                             <td class="border border-gray-300 px-4 py-2">@vehicle.Model</td>
                             <td class="border border-gray-300 px-4 py-2">@vehicle.VehicleType.Name</td>
+                            <td class="border border-gray-300 px-4 py-2">@vehicle.ParkingCost.ToString("C")</td>
                         </tr>
                     }
                 }
